@@ -1,0 +1,287 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "Building an AI-powered recruitment management platform inspired by Zoho Recruit, with enhanced AI capabilities for smarter hiring workflows, candidate tracking, job postings, resume parsing, and interview scheduling.",
+  "architectural_notes": [
+    "AI-first design: integrate LLM for resume parsing, candidate scoring, and recruiter suggestions throughout the platform",
+    "Modular architecture to allow future API integration with Zoho Recruit or other ATS platforms"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-build-a-react-frontend-with-a-sidebar-navigation-layout-featuring-sections-dashboard-jobs-candidates-pipeline-interviews-analytics-templates-offers-and-settings-include-a-top-header-with-app-logo-logged-in-user-role-indicator-and-notification-bell-icon",
+      "title": "Build a React frontend with a sidebar navigation layout featuring sections: Dashboard, Jobs, Candidates, Pipeline, Interviews, Analytics, Templates, Offers, and Settings. Include a top header with app logo, logged-in user role indicator, and notification bell icon.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-dashboard-page-displaying-live-recruiter-analytics-cards-for-total-open-jobs-total-active-candidates-total-interviews-this-week-and-average-time-to-hire-a-bar-chart-of-candidates-per-pipeline-stage-and-a-ranked-list-of-top-5-ai-matched-candidates-across-all-open-jobs",
+      "title": "Build a Dashboard page displaying live recruiter analytics: cards for total open jobs, total active candidates, total interviews this week, and average time-to-hire; a bar chart of candidates per pipeline stage; and a ranked list of top 5 AI-matched candidates across all open jobs.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-jobs-management-page-display-a-searchable-filterable-table-of-all-job-requisitions-with-status-badges-provide-a-slide-over-form-to-create-or-edit-a-job-with-all-required-fields-allow-status-changes-inline-and-include-a-view-candidates-action-per-job-that-navigates-to-the-filtered-candidate-pipeline",
+      "title": "Build a Jobs management page: display a searchable, filterable table of all job requisitions with status badges; provide a slide-over form to create or edit a job with all required fields; allow status changes inline; and include a 'View Candidates' action per job that navigates to the filtered candidate pipeline.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-candidates-management-page-display-a-searchable-table-of-candidates-with-ai-match-score-pipeline-stage-badge-and-applied-job-include-a-candidate-detail-panel-showing-parsed-profile-skill-tags-match-score-breakdown-timeline-of-stage-transitions-and-linked-interviews-provide-a-resume-text-upload-paste-area-that-triggers-ai-parsing-and-auto-fills-the-candidate-form",
+      "title": "Build a Candidates management page: display a searchable table of candidates with AI match score, pipeline stage badge, and applied job; include a candidate detail panel showing parsed profile, skill tags, match score breakdown, timeline of stage transitions, and linked interviews; provide a resume text upload/paste area that triggers AI parsing and auto-fills the candidate form.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-kanban-style-pipeline-board-page-display-columns-for-each-ats-stage-new-screening-shortlisted-interview-scheduled-offer-extended-hired-rejected-show-candidate-cards-with-name-job-and-ai-score-allow-drag-and-drop-between-columns-to-move-candidates-through-stages-with-an-optional-note-dialog-filter-board-by-job",
+      "title": "Build a Kanban-style Pipeline board page: display columns for each ATS stage (New, Screening, Shortlisted, Interview Scheduled, Offer Extended, Hired, Rejected); show candidate cards with name, job, and AI score; allow drag-and-drop between columns to move candidates through stages with an optional note dialog; filter board by job.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-interviews-page-display-a-list-calendar-toggle-of-scheduled-interviews-showing-candidate-name-job-interview-type-date-time-interviewer-and-status-provide-a-form-to-schedule-a-new-interview-or-edit-existing-ones-allow-marking-interviews-as-completed-or-cancelled",
+      "title": "Build an Interviews page: display a list/calendar toggle of scheduled interviews showing candidate name, job, interview type, date/time, interviewer, and status; provide a form to schedule a new interview or edit existing ones; allow marking interviews as completed or cancelled.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-ai-chatbot-widget-visible-site-wide-as-a-floating-button-the-chatbot-answers-candidate-faqs-about-job-openings-application-status-and-the-hiring-process-using-pre-defined-intents-and-job-data-fetched-from-the-backend-it-includes-a-suggested-questions-quick-reply-panel",
+      "title": "Build an AI Chatbot widget visible site-wide as a floating button: the chatbot answers candidate FAQs about job openings, application status, and the hiring process using pre-defined intents and job data fetched from the backend; it includes a suggested-questions quick-reply panel.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-analytics-page-with-visual-charts-line-chart-for-applications-over-time-last-30-days-donut-chart-for-pipeline-stage-distribution-bar-chart-for-top-jobs-by-application-volume-and-a-table-of-average-time-to-hire-per-job-use-react-query-to-fetch-data-from-backend-analytics-endpoints",
+      "title": "Build an Analytics page with visual charts: line chart for applications over time (last 30 days), donut chart for pipeline stage distribution, bar chart for top jobs by application volume, and a table of average time-to-hire per job. Use React Query to fetch data from backend analytics endpoints.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-templates-management-page-list-all-email-communication-templates-with-category-filter-provide-a-rich-text-editor-form-to-create-or-edit-templates-with-placeholder-token-insertion-buttons-show-a-live-preview-panel-rendering-the-template-with-sample-data",
+      "title": "Build a Templates management page: list all email/communication templates with category filter; provide a rich text editor form to create or edit templates with placeholder token insertion buttons; show a live preview panel rendering the template with sample data.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-offers-page-list-all-generated-offer-letters-with-candidate-name-job-salary-start-date-and-status-badge-provide-a-form-to-generate-a-new-offer-letter-with-custom-clauses-display-a-formatted-offer-letter-preview-allow-updating-offer-status-to-accepted-or-declined",
+      "title": "Build an Offers page: list all generated offer letters with candidate name, job, salary, start date, and status badge; provide a form to generate a new offer letter with custom clauses; display a formatted offer letter preview; allow updating offer status to accepted or declined.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-bold-modern-dark-mode-first-design-theme-across-the-entire-frontend-use-a-deep-charcoal-slate-background-with-vibrant-teal-and-amber-accent-colors-sharp-card-borders-clean-sans-serif-typography-subtle-gradient-highlights-on-ai-scored-elements-and-consistent-icon-usage-throughout-all-pages",
+      "title": "Apply a bold, modern dark-mode-first design theme across the entire frontend: use a deep charcoal/slate background with vibrant teal and amber accent colors, sharp card borders, clean sans-serif typography, subtle gradient highlights on AI-scored elements, and consistent icon usage throughout all pages.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-use-the-generated-hero-logo-asset-hireiq-logo-dim-200x60-png-in-the-sidebar-header-and-browser-tab-favicon-use-the-generated-dashboard-banner-dashboard-banner-dim-1200x300-png-as-a-decorative-header-on-the-dashboard-page",
+      "title": "Use the generated hero logo asset (hireiq-logo.dim_200x60.png) in the sidebar header and browser tab favicon. Use the generated dashboard banner (dashboard-banner.dim_1200x300.png) as a decorative header on the Dashboard page.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Job requisition and posting management",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "AI-powered resume parsing and candidate screening",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Candidate pipeline / applicant tracking system (ATS)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "AI-based candidate ranking and job match scoring",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Interview scheduling with calendar integration",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "AI chatbot for candidate engagement and FAQ",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Recruiter dashboard with analytics and hiring metrics",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Email and communication templates for candidates",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Role-based access control for HR, recruiter, and hiring manager",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Offer letter generation and onboarding workflow",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Build a Motoko backend actor that stores and manages job requisitions including fields: title, department, location, job type (full-time/part-time/contract), description, required skills, experience level, status (draft/open/closed/on-hold), and creation timestamp. Expose CRUD operations for job requisitions.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Build a candidate data model in the backend storing: name, email, phone, resume text, skills array, experience years, current status in pipeline (new/screening/shortlisted/interview/offer/hired/rejected), applied job IDs, AI match score per job, and timestamps. Expose CRUD and query-by-job-ID operations.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Implement AI-powered resume parsing in the backend: accept raw resume text input, extract structured data (skills, experience years, education, previous roles) using keyword and pattern matching in Motoko, and return a parsed candidate profile object.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Implement AI candidate-to-job match scoring in the backend: compare a candidate's extracted skills and experience against a job's required skills and experience level, compute a percentage match score (0–100), and store the score against the candidate's application record.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Implement an applicant tracking system (ATS) pipeline in the backend: support moving a candidate through stages (New → Screening → Shortlisted → Interview Scheduled → Offer Extended → Hired / Rejected), log each stage transition with a timestamp and optional recruiter note, and expose query functions to fetch candidates by pipeline stage for a given job.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Implement interview scheduling in the backend: create interview records linked to a candidate and job with fields for date/time, interviewer name, interview type (phone/video/on-site), status (scheduled/completed/cancelled), and notes. Expose CRUD operations for interviews.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Implement recruiter analytics in the backend: expose query functions that return aggregate metrics including total open jobs, total candidates per job, candidates per pipeline stage, average time-to-hire (days from application to hired), and top-scoring candidates by match score.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Implement email/communication templates in the backend: store reusable message templates with fields for name, subject, body (with placeholders like {{candidateName}}, {{jobTitle}}), and category (application acknowledgement, interview invite, rejection, offer). Expose CRUD operations.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Implement role-based access control in the backend: define roles (Admin, Recruiter, Hiring Manager) with associated permissions. Store user-role assignments, and expose functions to check if a caller has a required permission before sensitive operations (e.g., only Admin can delete jobs, only Recruiter/Admin can move candidates).",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Implement offer letter generation in the backend: accept candidate ID, job ID, salary, start date, and custom clauses, generate a structured offer letter text with all details populated, store the offer record with status (pending/accepted/declined), and expose status update operations.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Build an Interviews page: display a list/calendar toggle of scheduled interviews showing candidate name, job, interview type, date/time, interviewer, and status; provide a form to schedule a new interview or edit existing ones; allow marking interviews as completed or cancelled.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Build an Offers page: list all generated offer letters with candidate name, job, salary, start date, and status badge; provide a form to generate a new offer letter with custom clauses; display a formatted offer letter preview; allow updating offer status to accepted or declined.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Build an Analytics page with visual charts: line chart for applications over time (last 30 days), donut chart for pipeline stage distribution, bar chart for top jobs by application volume, and a table of average time-to-hire per job. Use React Query to fetch data from backend analytics endpoints.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Enhance the Dashboard page to display live recruiter analytics summary cards for: total open jobs, total active candidates, total interviews this week, and average time-to-hire; a bar chart of candidates per pipeline stage; and a ranked list of top 5 AI-matched candidates across all open jobs.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "AI Recruit Pro",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

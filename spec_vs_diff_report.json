@@ -1,0 +1,54 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-28T06:01:32.561Z",
+  "summary": "The diff shows minimal changes: a new migration module (backend/migration.mo) and modifications to backend/main.mo and project_state.json. The migration adds candidateName and jobTitle fields to the Interview type. The backend/main.mo shows Interview type updated with candidateName and jobTitle, plus AnalyticsResult type. However, the diff is heavily truncated and no frontend files are present. REQ-23 through REQ-26 all require significant frontend work (pages, charts, forms, React Query integration) and substantial backend analytics endpoints — none of which are visible in the diff.",
+  "missing_requirements": [
+    {
+      "id": "REQ-23",
+      "requirement": "Build an Interviews page with list/calendar toggle, interview scheduling form, edit capability, and mark completed/cancelled actions",
+      "reason": "No frontend Interviews page file is present in the diff. Only a backend migration adding candidateName/jobTitle fields to Interview is visible. No list view, calendar toggle, form/dialog, edit, or mark-complete/cancel UI is implemented in the diff.",
+      "evidence": [
+        "backend/migration.mo",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "requirement": "Build an Offers page with offer letter list, generation form with custom clauses, formatted preview panel, and accept/decline actions",
+      "reason": "No frontend Offers page file is present in the diff. The OfferLetter type already existed. No new offers UI, form, preview panel, or status update actions are visible.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-25",
+      "requirement": "Build an Analytics page with line chart (applications over time), donut chart (pipeline stage distribution), bar chart (top jobs by volume), and time-to-hire table",
+      "reason": "No frontend Analytics page file is present in the diff. The backend/main.mo is truncated and shows an AnalyticsResult type stub but no analytics query endpoints are confirmed. No charts or data table UI is implemented.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "requirement": "Enhance the Dashboard page with live summary metric cards, pipeline stage bar chart, and top 5 AI-matched candidates list",
+      "reason": "No frontend Dashboard page modifications are present in the diff. No summary cards, bar chart, or top candidates ranked list updates are visible.",
+      "evidence": []
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Migration module (backend/migration.mo) for upgrading Interview records with candidateName and jobTitle fields",
+      "reason": "The build request does not mention a migration module or any data migration concern. This was added without being requested.",
+      "evidence": [
+        "backend/migration.mo"
+      ]
+    }
+  ],
+  "confidence": 0.55,
+  "changed_files": [
+    "backend/main.mo",
+    "backend/migration.mo",
+    "project_state.json"
+  ]
+}

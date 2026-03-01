@@ -1,0 +1,104 @@
+{
+  "kind": "build_request",
+  "title": "Build out remaining features: interview scheduling, offer letter generation, and recruiter analytics",
+  "projectName": "HireIQ",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-23",
+      "text": "Build an Interviews page: display a list/calendar toggle of scheduled interviews showing candidate name, job, interview type, date/time, interviewer, and status; provide a form to schedule a new interview or edit existing ones; allow marking interviews as completed or cancelled.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "interview scheduling"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Interviews page shows a list view of all scheduled interviews with candidate name, job title, interview type, date/time, interviewer, and status",
+        "A calendar toggle view is available that renders interviews on a calendar grid",
+        "A form/dialog allows scheduling a new interview with fields: candidate, job, date/time, interviewer, interview type (phone/video/on-site), status, and notes",
+        "Existing interviews can be edited via the same form",
+        "Each interview has actions to mark it as completed or cancelled",
+        "Data is fetched from and persisted to the backend via React Query"
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "text": "Build an Offers page: list all generated offer letters with candidate name, job, salary, start date, and status badge; provide a form to generate a new offer letter with custom clauses; display a formatted offer letter preview; allow updating offer status to accepted or declined.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "offer letter generation"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Offers page displays a table/list of all offer letters with columns for candidate name, job title, salary, start date, and a color-coded status badge (pending/accepted/declined)",
+        "A form allows generating a new offer letter by selecting candidate ID, job ID, entering salary, start date, and optional custom clauses",
+        "A formatted offer letter preview panel renders the generated offer text with all populated fields",
+        "Each offer has inline actions to update its status to accepted or declined",
+        "Offer data is fetched from and persisted to the backend via React Query"
+      ]
+    },
+    {
+      "id": "REQ-25",
+      "text": "Build an Analytics page with visual charts: line chart for applications over time (last 30 days), donut chart for pipeline stage distribution, bar chart for top jobs by application volume, and a table of average time-to-hire per job. Use React Query to fetch data from backend analytics endpoints.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "recruiter analytics"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Analytics page renders a line chart showing the number of new candidate applications per day over the last 30 days",
+        "A donut/pie chart shows the distribution of candidates across all pipeline stages",
+        "A bar chart shows the top jobs ranked by total application volume",
+        "A data table shows average time-to-hire (days from application to hired status) per job",
+        "All chart data is fetched from backend analytics query functions via React Query",
+        "Charts are responsive and styled consistently with the dark-mode theme"
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "text": "Enhance the Dashboard page to display live recruiter analytics summary cards for: total open jobs, total active candidates, total interviews this week, and average time-to-hire; a bar chart of candidates per pipeline stage; and a ranked list of top 5 AI-matched candidates across all open jobs.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "recruiter analytics"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Dashboard shows four summary metric cards: total open jobs, total active candidates, interviews scheduled this week, and average time-to-hire in days",
+        "A bar chart visualizes the count of candidates in each pipeline stage",
+        "A ranked list displays the top 5 candidates by AI match score across all open jobs, showing candidate name, job title, and score",
+        "All data is live-fetched from backend endpoints via React Query with loading and error states"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui",
+    "All backend logic must remain in the single main actor (backend/main.mo)",
+    "Preserve existing dark-mode-first design theme with teal and amber accents"
+  ],
+  "nonGoals": [
+    "Adding new pipeline stages beyond the existing ATS stages",
+    "External calendar integrations (Google Calendar, Outlook)",
+    "Email sending functionality for offer letters or interview invites",
+    "Settings page changes"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

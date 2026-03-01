@@ -1,0 +1,4 @@
+{
+  "frontend/src/pages/Offers.tsx": "Full Offers page that aggregates offer letters across all candidates, displays them in a card grid with salary/start date/status details, and supports generating new offers and deleting existing ones.",
+  "frontend/src/components/OfferForm.tsx": "Dialog component for generating new offer letters (with candidate/job/salary/start date fields) and viewing existing ones with accept/decline status update actions."
+}

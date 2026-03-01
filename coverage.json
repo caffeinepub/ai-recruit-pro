@@ -1,0 +1,69 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-28T06:01:32.564Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 4,
+    "implemented": 0,
+    "items": [
+      {
+        "id": "REQ-23",
+        "summary": "Build an Interviews page: display a list/calendar toggle of scheduled interviews showing candidate name, job, interview type, date/time, interviewer, and status; provide a form to schedule a new interview or edit existing ones; allow marking interviews as completed or cancelled.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/pages/Interviews.tsx",
+          "frontend/src/components/InterviewForm.tsx"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-24",
+        "summary": "Build an Offers page: list all generated offer letters with candidate name, job, salary, start date, and status badge; provide a form to generate a new offer letter with custom clauses; display a formatted offer letter preview; allow updating offer status to accepted or declined.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/pages/Offers.tsx",
+          "frontend/src/components/OfferForm.tsx"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-25",
+        "summary": "Build an Analytics page with visual charts: line chart for applications over time (last 30 days), donut chart for pipeline stage distribution, bar chart for top jobs by application volume, and a table of average time-to-hire per job. Use React Query to fetch data from backend analytics endpoints.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/pages/Analytics.tsx"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-26",
+        "summary": "Enhance the Dashboard page to display live recruiter analytics summary cards for: total open jobs, total active candidates, total interviews this week, and average time-to-hire; a bar chart of candidates per pipeline stage; and a ranked list of top 5 AI-matched candidates across all open jobs.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/pages/Dashboard.tsx"
+        ],
+        "matchedFiles": []
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
+    "build-request.json",
+    "build-template/README.md",
+    "feature_evidence.json",
+    "frontend-implementation-plan.json",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Build out remaining features: interview scheduling, offer letter generation, and recruiter analytics",
+  "requirements": [
+    {
+      "id": "REQ-23",
+      "summary": "Build an Interviews page with list/calendar toggle views, interview scheduling form, and status management for interviews",
+      "acceptanceCriteria": [
+        "Interviews page shows a list view of all scheduled interviews with candidate name, job title, interview type, date/time, interviewer, and status",
+        "A calendar toggle view is available that renders interviews on a calendar grid",
+        "A form/dialog allows scheduling a new interview with fields: candidate, job, date/time, interviewer, interview type (phone/video/on-site), status, and notes",
+        "Existing interviews can be edited via the same form",
+        "Each interview has actions to mark it as completed or cancelled",
+        "Data is fetched from and persisted to the backend via React Query"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Interviews.tsx",
+          "operation": "modify",
+          "description": "Replace the current Interviews page implementation with a comprehensive view that includes: a list view showing all scheduled interviews with all required fields (candidate name, job title, interview type, date/time, interviewer, status); a calendar toggle that switches between list and calendar grid views; inline actions for each interview to mark as completed or cancelled using status update mutations; and integration with the InterviewForm component for creating and editing interviews. Use the existing useListInterviews, useCreateInterview, and useUpdateInterview hooks from useQueries.ts. Add view toggle state and calendar rendering logic using a date-based grid layout."
+        },
+        {
+          "path": "frontend/src/components/InterviewForm.tsx",
+          "operation": "modify",
+          "description": "Enhance the InterviewForm component to support all required fields and validation: ensure candidate selection dropdown is populated from useListCandidates; ensure job selection dropdown is populated from useListJobs; add date/time picker for scheduling; add interviewer text input; add interview type radio group or select for phone/video/on-site options; add status dropdown for scheduled/completed/cancelled; add notes textarea; wire the form to use createInterview2 mutation for creating interviews and updateInterview2 mutation for editing; populate form fields when editing an existing interview; validate that all required fields are filled before submission."
+        }
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "summary": "Build an Offers page to list, generate, preview, and manage offer letters with status tracking",
+      "acceptanceCriteria": [
+        "Offers page displays a table/list of all offer letters with columns for candidate name, job title, salary, start date, and a color-coded status badge (pending/accepted/declined)",
+        "A form allows generating a new offer letter by selecting candidate ID, job ID, entering salary, start date, and optional custom clauses",
+        "A formatted offer letter preview panel renders the generated offer text with all populated fields",
+        "Each offer has inline actions to update its status to accepted or declined",
+        "Offer data is fetched from and persisted to the backend via React Query"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Offers.tsx",
+          "operation": "modify",
+          "description": "Replace the current Offers page implementation with a comprehensive view that displays all offer letters in a table format with columns for candidate name (resolved from candidateId), job title (resolved from jobId), salary, start date, and a color-coded status badge using teal for pending, amber for accepted, and red for declined. Add inline action buttons or dropdown menus for each offer to update status to accepted or declined using the useUpdateOfferStatus mutation hook. Integrate the OfferForm component for creating new offer letters. Use useListOfferLetters to fetch all offers, useListCandidates and useListJobs to resolve names and titles for display. Add loading and error states with appropriate UI feedback."
+        },
+        {
+          "path": "frontend/src/components/OfferForm.tsx",
+          "operation": "modify",
+          "description": "Enhance the OfferForm component to include: a candidate selection dropdown populated from useListCandidates; a job selection dropdown populated from useListJobs; a salary number input field; a start date picker; a custom clauses textarea for optional additional terms; a formatted offer letter preview section that displays the generated letterText field returned from the backend after creation; wire the form to use the useCreateOfferLetter mutation with all required fields (candidateId, jobId, salary, startDate, clauses); ensure the preview panel renders the offer letter text with proper formatting and styling; validate that candidate, job, salary, and start date are provided before submission."
+        }
+      ]
+    },
+    {
+      "id": "REQ-25",
+      "summary": "Build an Analytics page with visual charts for applications over time, pipeline distribution, top jobs, and time-to-hire metrics",
+      "acceptanceCriteria": [
+        "Analytics page renders a line chart showing the number of new candidate applications per day over the last 30 days",
+        "A donut/pie chart shows the distribution of candidates across all pipeline stages",
+        "A bar chart shows the top jobs ranked by total application volume",
+        "A data table shows average time-to-hire (days from application to hired status) per job",
+        "All chart data is fetched from backend analytics query functions via React Query",
+        "Charts are responsive and styled consistently with the dark-mode theme"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Analytics.tsx",
+          "operation": "modify",
+          "description": "Enhance the existing Analytics page to include all required charts and visualizations: ensure the line chart renders daily application counts from analyticsData.last30DaysApplications with proper date labels for the last 30 days; ensure the donut/pie chart displays pipeline stage distribution using analyticsData.pipelineStageDistribution with color-coded segments for each stage; ensure the bar chart shows top jobs by application volume using analyticsData.topJobsByVolume, resolving job titles from useListJobs; add a data table section displaying average time-to-hire per job using analyticsData.avgTimeToHirePerJob, showing job title and days; use Recharts library components (LineChart, PieChart, BarChart) for all visualizations; apply dark-mode-first styling with teal and amber accent colors; ensure all charts are responsive and handle loading/error states gracefully; fetch data using the existing useGetAnalytics hook."
+        }
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "summary": "Enhance the Dashboard page with live recruiter analytics summary cards, pipeline bar chart, and top AI-matched candidates list",
+      "acceptanceCriteria": [
+        "Dashboard shows four summary metric cards: total open jobs, total active candidates, interviews scheduled this week, and average time-to-hire in days",
+        "A bar chart visualizes the count of candidates in each pipeline stage",
+        "A ranked list displays the top 5 candidates by AI match score across all open jobs, showing candidate name, job title, and score",
+        "All data is live-fetched from backend endpoints via React Query with loading and error states"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Dashboard.tsx",
+          "operation": "modify",
+          "description": "Enhance the existing Dashboard page to display comprehensive recruiter analytics: add four prominent summary metric cards at the top showing total open jobs (count jobs with status='open'), total active candidates (count candidates with status not 'rejected' or 'hired'), interviews scheduled this week (filter interviews by dateTime within current week), and average time-to-hire in days (from analyticsData.averageTimeToHireDays); ensure the existing pipeline stage bar chart is updated to use live data from analyticsData.candidatesPerStage; add a ranked list section displaying the top 5 candidates by AI match score using analyticsData.topScoringCandidates, resolving candidate names and job titles, and displaying their match scores using the AIScoreBadge component; fetch analytics data using useGetAnalytics, jobs using useListJobs, candidates using useListCandidates, and interviews using useListInterviews; implement proper loading skeletons and error states for each data section; style consistently with the dark-mode theme and teal/amber accents."
+        }
+      ]
+    }
+  ]
+}
