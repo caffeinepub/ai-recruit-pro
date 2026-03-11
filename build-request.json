@@ -1,104 +1,434 @@
 {
   "kind": "build_request",
-  "title": "Build out remaining features: interview scheduling, offer letter generation, and recruiter analytics",
+  "title": "AI-Powered Recruitment Management Platform (Zoho Recruit Alternative)",
   "projectName": "HireIQ",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-23",
-      "text": "Build an Interviews page: display a list/calendar toggle of scheduled interviews showing candidate name, job, interview type, date/time, interviewer, and status; provide a form to schedule a new interview or edit existing ones; allow marking interviews as completed or cancelled.",
-      "target": "both",
+      "id": "REQ-1",
+      "text": "Build a Motoko backend actor that stores and manages job requisitions including fields: title, department, location, job type (full-time/part-time/contract), description, required skills, experience level, status (draft/open/closed/on-hold), and creation timestamp. Expose CRUD operations for job requisitions.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-2"
         ],
         "quotes": [
-          "interview scheduling"
+          "Develop a app like Zoho Recruit with AI implenataion but in a better way"
         ]
       },
       "acceptanceCriteria": [
-        "Interviews page shows a list view of all scheduled interviews with candidate name, job title, interview type, date/time, interviewer, and status",
-        "A calendar toggle view is available that renders interviews on a calendar grid",
-        "A form/dialog allows scheduling a new interview with fields: candidate, job, date/time, interviewer, interview type (phone/video/on-site), status, and notes",
-        "Existing interviews can be edited via the same form",
-        "Each interview has actions to mark it as completed or cancelled",
-        "Data is fetched from and persisted to the backend via React Query"
+        "Can create, read, update, and delete job requisitions",
+        "Job requisition includes all required fields",
+        "Status transitions are tracked and persisted"
       ]
     },
     {
-      "id": "REQ-24",
-      "text": "Build an Offers page: list all generated offer letters with candidate name, job, salary, start date, and status badge; provide a form to generate a new offer letter with custom clauses; display a formatted offer letter preview; allow updating offer status to accepted or declined.",
-      "target": "both",
+      "id": "REQ-2",
+      "text": "Build a candidate data model in the backend storing: name, email, phone, resume text, skills array, experience years, current status in pipeline (new/screening/shortlisted/interview/offer/hired/rejected), applied job IDs, AI match score per job, and timestamps. Expose CRUD and query-by-job-ID operations.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-2"
         ],
         "quotes": [
-          "offer letter generation"
+          "Develop a app like Zoho Recruit with AI implenataion but in a better way"
         ]
       },
       "acceptanceCriteria": [
-        "Offers page displays a table/list of all offer letters with columns for candidate name, job title, salary, start date, and a color-coded status badge (pending/accepted/declined)",
-        "A form allows generating a new offer letter by selecting candidate ID, job ID, entering salary, start date, and optional custom clauses",
-        "A formatted offer letter preview panel renders the generated offer text with all populated fields",
-        "Each offer has inline actions to update its status to accepted or declined",
-        "Offer data is fetched from and persisted to the backend via React Query"
+        "Candidates can be created and retrieved by ID or by job application",
+        "Pipeline status can be updated per candidate",
+        "AI match score field is persisted and retrievable"
       ]
     },
     {
-      "id": "REQ-25",
-      "text": "Build an Analytics page with visual charts: line chart for applications over time (last 30 days), donut chart for pipeline stage distribution, bar chart for top jobs by application volume, and a table of average time-to-hire per job. Use React Query to fetch data from backend analytics endpoints.",
-      "target": "both",
+      "id": "REQ-3",
+      "text": "Implement AI-powered resume parsing in the backend: accept raw resume text input, extract structured data (skills, experience years, education, previous roles) using keyword and pattern matching in Motoko, and return a parsed candidate profile object.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-2"
         ],
         "quotes": [
-          "recruiter analytics"
+          "AI implenataion but in a better way"
         ]
       },
       "acceptanceCriteria": [
-        "Analytics page renders a line chart showing the number of new candidate applications per day over the last 30 days",
-        "A donut/pie chart shows the distribution of candidates across all pipeline stages",
-        "A bar chart shows the top jobs ranked by total application volume",
-        "A data table shows average time-to-hire (days from application to hired status) per job",
-        "All chart data is fetched from backend analytics query functions via React Query",
-        "Charts are responsive and styled consistently with the dark-mode theme"
+        "Submitting raw resume text returns a structured candidate profile",
+        "Extracted fields include skills, years of experience, and education",
+        "Parsing handles common resume formats"
       ]
     },
     {
-      "id": "REQ-26",
-      "text": "Enhance the Dashboard page to display live recruiter analytics summary cards for: total open jobs, total active candidates, total interviews this week, and average time-to-hire; a bar chart of candidates per pipeline stage; and a ranked list of top 5 AI-matched candidates across all open jobs.",
+      "id": "REQ-4",
+      "text": "Implement AI candidate-to-job match scoring in the backend: compare a candidate's extracted skills and experience against a job's required skills and experience level, compute a percentage match score (0–100), and store the score against the candidate's application record.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "AI implenataion but in a better way"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each candidate-job pair has a computed match score between 0 and 100",
+        "Score reflects overlap between candidate skills and job requirements",
+        "Scores are persisted and can be queried to rank candidates for a job"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Implement an applicant tracking system (ATS) pipeline in the backend: support moving a candidate through stages (New → Screening → Shortlisted → Interview Scheduled → Offer Extended → Hired / Rejected), log each stage transition with a timestamp and optional recruiter note, and expose query functions to fetch candidates by pipeline stage for a given job.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Candidates can be moved between defined pipeline stages",
+        "Each transition records timestamp and optional note",
+        "Candidates can be listed by stage and by job"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Implement interview scheduling in the backend: create interview records linked to a candidate and job with fields for date/time, interviewer name, interview type (phone/video/on-site), status (scheduled/completed/cancelled), and notes. Expose CRUD operations for interviews.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Interviews can be scheduled and linked to candidate and job",
+        "Interview status can be updated",
+        "Interviews are retrievable by candidate or by job"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Implement recruiter analytics in the backend: expose query functions that return aggregate metrics including total open jobs, total candidates per job, candidates per pipeline stage, average time-to-hire (days from application to hired), and top-scoring candidates by match score.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Analytics endpoint returns total open jobs count",
+        "Per-stage candidate counts are available for each job",
+        "Average time-to-hire is computed from timestamps",
+        "Top N candidates ranked by AI score are retrievable"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Implement email/communication templates in the backend: store reusable message templates with fields for name, subject, body (with placeholders like {{candidateName}}, {{jobTitle}}), and category (application acknowledgement, interview invite, rejection, offer). Expose CRUD operations.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Templates can be created, read, updated, and deleted",
+        "Templates support placeholder tokens",
+        "Templates are categorized and retrievable by category"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Implement role-based access control in the backend: define roles (Admin, Recruiter, Hiring Manager) with associated permissions. Store user-role assignments, and expose functions to check if a caller has a required permission before sensitive operations (e.g., only Admin can delete jobs, only Recruiter/Admin can move candidates).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Three roles are defined with distinct permission sets",
+        "User-role assignments are stored and queryable",
+        "Unauthorized callers receive an error on restricted operations"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Implement offer letter generation in the backend: accept candidate ID, job ID, salary, start date, and custom clauses, generate a structured offer letter text with all details populated, store the offer record with status (pending/accepted/declined), and expose status update operations.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Offer letters are generated with all provided fields",
+        "Offer records are stored with pending/accepted/declined status",
+        "Status can be updated and persisted"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Build a React frontend with a sidebar navigation layout featuring sections: Dashboard, Jobs, Candidates, Pipeline, Interviews, Analytics, Templates, Offers, and Settings. Include a top header with app logo, logged-in user role indicator, and notification bell icon.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-2"
         ],
         "quotes": [
-          "recruiter analytics"
+          "Develop a app like Zoho Recruit with AI implenataion"
         ]
       },
       "acceptanceCriteria": [
-        "Dashboard shows four summary metric cards: total open jobs, total active candidates, interviews scheduled this week, and average time-to-hire in days",
-        "A bar chart visualizes the count of candidates in each pipeline stage",
-        "A ranked list displays the top 5 candidates by AI match score across all open jobs, showing candidate name, job title, and score",
-        "All data is live-fetched from backend endpoints via React Query with loading and error states"
+        "Sidebar navigation renders all listed sections",
+        "Active section is visually highlighted",
+        "Header shows app logo, user role, and notification icon",
+        "Layout is responsive and collapses sidebar on smaller screens"
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "text": "Build a Dashboard page displaying live recruiter analytics: cards for total open jobs, total active candidates, total interviews this week, and average time-to-hire; a bar chart of candidates per pipeline stage; and a ranked list of top 5 AI-matched candidates across all open jobs.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Metric cards display real data fetched from backend",
+        "Bar chart renders candidate counts per pipeline stage",
+        "Top 5 AI-matched candidates are listed with scores and job names"
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "text": "Build a Jobs management page: display a searchable, filterable table of all job requisitions with status badges; provide a slide-over form to create or edit a job with all required fields; allow status changes inline; and include a 'View Candidates' action per job that navigates to the filtered candidate pipeline.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Jobs table displays all requisitions with search and filter by status/department",
+        "Create/edit form covers all job fields and submits successfully",
+        "Status badge reflects current job status",
+        "View Candidates navigates to the pipeline filtered by that job"
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Build a Candidates management page: display a searchable table of candidates with AI match score, pipeline stage badge, and applied job; include a candidate detail panel showing parsed profile, skill tags, match score breakdown, timeline of stage transitions, and linked interviews; provide a resume text upload/paste area that triggers AI parsing and auto-fills the candidate form.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "AI implenataion but in a better way"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Candidate table is searchable and shows AI score and stage",
+        "Detail panel shows all profile fields, skill tags, and stage history",
+        "Resume paste area triggers backend parsing and populates the form",
+        "AI match score is visually displayed with a progress bar or gauge"
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "text": "Build a Kanban-style Pipeline board page: display columns for each ATS stage (New, Screening, Shortlisted, Interview Scheduled, Offer Extended, Hired, Rejected); show candidate cards with name, job, and AI score; allow drag-and-drop between columns to move candidates through stages with an optional note dialog; filter board by job.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Kanban columns render for all pipeline stages",
+        "Candidate cards show name, job title, and AI match score",
+        "Dragging a card to a new column updates stage via backend call",
+        "Board can be filtered to show only candidates for a selected job"
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "text": "Build an Interviews page: display a list/calendar toggle of scheduled interviews showing candidate name, job, interview type, date/time, interviewer, and status; provide a form to schedule a new interview or edit existing ones; allow marking interviews as completed or cancelled.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Interviews are displayed in both list and simple calendar view",
+        "Schedule interview form links to candidate and job",
+        "Status can be updated to completed or cancelled",
+        "Upcoming interviews are highlighted"
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "text": "Build an AI Chatbot widget visible site-wide as a floating button: the chatbot answers candidate FAQs about job openings, application status, and the hiring process using pre-defined intents and job data fetched from the backend; it includes a suggested-questions quick-reply panel.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "AI implenataion but in a better way"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Floating chat button is accessible on all pages",
+        "Chatbot responds to at least 10 common recruitment FAQs",
+        "Quick-reply suggestions are shown for common intents",
+        "Chatbot can list open job titles fetched from the backend"
+      ]
+    },
+    {
+      "id": "REQ-18",
+      "text": "Build an Analytics page with visual charts: line chart for applications over time (last 30 days), donut chart for pipeline stage distribution, bar chart for top jobs by application volume, and a table of average time-to-hire per job. Use React Query to fetch data from backend analytics endpoints.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All four charts render with real backend data",
+        "Charts are labelled and include legends",
+        "Data auto-refreshes on page visit via React Query"
+      ]
+    },
+    {
+      "id": "REQ-19",
+      "text": "Build a Templates management page: list all email/communication templates with category filter; provide a rich text editor form to create or edit templates with placeholder token insertion buttons; show a live preview panel rendering the template with sample data.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Templates are listed and filterable by category",
+        "Create/edit form supports placeholder token insertion",
+        "Live preview renders template with sample candidate and job data"
+      ]
+    },
+    {
+      "id": "REQ-20",
+      "text": "Build an Offers page: list all generated offer letters with candidate name, job, salary, start date, and status badge; provide a form to generate a new offer letter with custom clauses; display a formatted offer letter preview; allow updating offer status to accepted or declined.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Develop a app like Zoho Recruit"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Offers list shows all fields and status badges",
+        "Offer generation form populates all required fields",
+        "Formatted offer letter preview renders before saving",
+        "Status update (accept/decline) persists via backend call"
+      ]
+    },
+    {
+      "id": "REQ-21",
+      "text": "Apply a bold, modern dark-mode-first design theme across the entire frontend: use a deep charcoal/slate background with vibrant teal and amber accent colors, sharp card borders, clean sans-serif typography, subtle gradient highlights on AI-scored elements, and consistent icon usage throughout all pages.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "in a better way"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Dark background is applied globally",
+        "Teal and amber accents are used consistently for CTAs and highlights",
+        "AI score elements use gradient treatment to differentiate them visually",
+        "Typography and spacing are consistent across all pages"
+      ]
+    },
+    {
+      "id": "REQ-22",
+      "text": "Use the generated hero logo asset (hireiq-logo.dim_200x60.png) in the sidebar header and browser tab favicon. Use the generated dashboard banner (dashboard-banner.dim_1200x300.png) as a decorative header on the Dashboard page.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Logo appears in the sidebar at correct dimensions",
+        "Dashboard banner is rendered at the top of the Dashboard page",
+        "Assets are loaded from frontend/public/assets/generated"
       ]
     }
   ],
   "constraints": [
-    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui",
-    "All backend logic must remain in the single main actor (backend/main.mo)",
-    "Preserve existing dark-mode-first design theme with teal and amber accents"
+    "All backend logic must reside in a single Motoko actor in backend/main.mo",
+    "Do not integrate external AI services (OpenAI, etc.); all AI features must use in-canister logic such as keyword matching and scoring algorithms",
+    "Do not use external databases; use Motoko stable variables for all persistence",
+    "Do not edit files in frontend/src/hooks/ or frontend/src/components/ui",
+    "Frontend must use React, TypeScript, Tailwind CSS, and React Query only"
   ],
   "nonGoals": [
-    "Adding new pipeline stages beyond the existing ATS stages",
-    "External calendar integrations (Google Calendar, Outlook)",
-    "Email sending functionality for offer letters or interview invites",
-    "Settings page changes"
+    "Real-time WebSocket notifications",
+    "Email sending via SMTP or third-party email services",
+    "OAuth or social login (only Internet Identity if authentication is added later)",
+    "Mobile native app",
+    "External calendar sync (Google Calendar, Outlook)",
+    "Multi-tenant SaaS billing or subscription management",
+    "Video conferencing integration"
   ],
   "imageRequirements": {
-    "required": [],
+    "required": [
+      "HireIQ wordmark logo with a minimalist abstract neural-network node icon in teal on a dark background (hireiq-logo.dim_200x60.png)",
+      "Wide decorative dashboard banner with abstract flowing data visualization lines in teal and amber on a deep charcoal background (dashboard-banner.dim_1200x300.png)",
+      "Small square app icon with the HireIQ initials stylized in teal on dark slate (hireiq-icon.dim_64x64.png)"
+    ],
     "edits": []
   }
 }

@@ -10,9 +10,7 @@ import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
-import Migration "migration";
 
-(with migration = Migration.run)
 actor {
   // Prefab authorization system
   let accessControlState = AccessControl.initState();
@@ -132,9 +130,7 @@ actor {
   public type Interview = {
     id : Nat;
     candidateId : Nat;
-    candidateName : Text;
     jobId : Nat;
-    jobTitle : Text;
     dateTime : Time.Time;
     interviewer : Text;
     interviewType : InterviewType;
@@ -175,20 +171,9 @@ actor {
     candidatesPerStage : [(Text, Nat)];
     averageTimeToHireDays : Float;
     topScoringCandidates : [(Nat, Nat)];
-    last30DaysApplications : [Nat];
-    pipelineStageDistribution : [(Text, Nat)];
-    topJobsByVolume : [(Nat, Nat)];
-    avgTimeToHirePerJob : [(Nat, Float)];
   };
 
-  public type InterviewInput = {
-    candidateId : Nat;
-    jobId : Nat;
-    dateTime : Time.Time;
-    interviewer : Text;
-    interviewType : InterviewType;
-    notes : Text;
-  };
+  // ── Mutable State ─────────────────────────────────────────────────────────
 
   var nextJobId : Nat = 0;
   var nextCandidateId : Nat = 0;
@@ -202,6 +187,8 @@ actor {
   let communicationTemplates = Map.empty<Nat, CommunicationTemplate>();
   let offerLetters = Map.empty<Nat, OfferLetter>();
 
+  // ── Helper: skill matching ────────────────────────────────────────────────
+
   func containsSkill(skills : [Text], target : Text) : Bool {
     let targetLower = target.toLower();
     for (s in skills.values()) {
@@ -210,6 +197,9 @@ actor {
     false;
   };
 
+  // ── Job Requisition CRUD ──────────────────────────────────────────────────
+
+  /// Create a new job requisition. Admin only.
   public shared ({ caller }) func createJob(
     title : Text,
     department : Text,
@@ -240,6 +230,7 @@ actor {
     id;
   };
 
+  /// Update an existing job requisition. Admin only.
   public shared ({ caller }) func updateJob(
     id : Nat,
     title : Text,
@@ -273,6 +264,7 @@ actor {
     };
   };
 
+  /// Update job status. Admin only.
   public shared ({ caller }) func updateJobStatus(id : Nat, status : JobStatus) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can update job status");
@@ -297,6 +289,7 @@ actor {
     };
   };
 
+  /// Delete a job requisition. Admin only.
   public shared ({ caller }) func deleteJob(id : Nat) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can delete jobs");
@@ -307,6 +300,7 @@ actor {
     jobRequisitions.remove(id);
   };
 
+  /// Get a single job requisition. Any authenticated user.
   public query ({ caller }) func getJob(id : Nat) : async ?JobRequisition {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view jobs");
@@ -314,6 +308,7 @@ actor {
     jobRequisitions.get(id);
   };
 
+  /// List all job requisitions. Any authenticated user.
   public query ({ caller }) func listJobs() : async [JobRequisition] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can list jobs");
@@ -325,6 +320,9 @@ actor {
     result.toArray();
   };
 
+  // ── Candidate CRUD ────────────────────────────────────────────────────────
+
+  /// Create a candidate profile. Any authenticated user (recruiter submitting on behalf).
   public shared ({ caller }) func createCandidate(
     name : Text,
     email : Text,
@@ -357,6 +355,7 @@ actor {
     id;
   };
 
+  /// Update candidate details. Any authenticated user.
   public shared ({ caller }) func updateCandidate(
     id : Nat,
     name : Text,
@@ -392,6 +391,7 @@ actor {
     };
   };
 
+  /// Delete a candidate. Admin only.
   public shared ({ caller }) func deleteCandidate(id : Nat) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can delete candidates");
@@ -402,6 +402,7 @@ actor {
     candidates.remove(id);
   };
 
+  /// Get a single candidate. Any authenticated user.
   public query ({ caller }) func getCandidate(id : Nat) : async ?Candidate {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view candidates");
@@ -409,6 +410,7 @@ actor {
     candidates.get(id);
   };
 
+  /// List all candidates. Any authenticated user.
   public query ({ caller }) func listCandidates() : async [Candidate] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can list candidates");
@@ -420,6 +422,7 @@ actor {
     result.toArray();
   };
 
+  /// Get candidates by job ID. Any authenticated user.
   public query ({ caller }) func getCandidatesByJob(jobId : Nat) : async [Candidate] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can query candidates by job");
@@ -435,6 +438,7 @@ actor {
     result.toArray();
   };
 
+  /// Apply a candidate to a job. Any authenticated user.
   public shared ({ caller }) func applyToJob(candidateId : Nat, jobId : Nat) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can apply candidates to jobs");
@@ -442,6 +446,7 @@ actor {
     switch (candidates.get(candidateId)) {
       case (null) Runtime.trap("Candidate not found");
       case (?existing) {
+        // Avoid duplicate applications
         for (jid in existing.appliedJobIds.values()) {
           if (jid == jobId) Runtime.trap("Already applied to this job");
         };
@@ -467,11 +472,10 @@ actor {
     };
   };
 
-  // parseResume requires #user authorization to prevent anonymous abuse
-  public query ({ caller }) func parseResume(resumeText : Text) : async ParsedResume {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can parse resumes");
-    };
+  // ── Resume Parsing ────────────────────────────────────────────────────────
+
+  /// Parse a resume text and extract structured data. No auth required (public utility).
+  public query func parseResume(resumeText : Text) : async ParsedResume {
     let knownSkills = [
       "Motoko", "Rust", "Python", "JavaScript", "TypeScript", "Java", "Go",
       "Blockchain", "Smart Contracts", "Software Development", "React", "Node.js",
@@ -511,6 +515,7 @@ actor {
       };
     };
 
+    // Simple heuristic: count occurrences of "year" near numbers
     if (resumeLower.contains(#text "10+ years") or resumeLower.contains(#text "10 years")) {
       experienceYears := 10;
     } else if (resumeLower.contains(#text "8 years") or resumeLower.contains(#text "9 years")) {
@@ -533,6 +538,9 @@ actor {
     };
   };
 
+  // ── Match Scoring ─────────────────────────────────────────────────────────
+
+  /// Calculate and store a match score for a candidate against a job. Any authenticated user.
   public shared ({ caller }) func calculateMatchScore(candidateId : Nat, jobId : Nat) : async Nat {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can calculate match scores");
@@ -564,6 +572,7 @@ actor {
             let total : Int = skillsScore + expScore;
             let finalScore : Nat = if (total <= 0) { 0 } else if (total >= 100) { 100 } else { Int.abs(total) };
 
+            // Update stored match scores
             let newScores = List.empty<(Nat, Nat)>();
             var replaced = false;
             for ((jid, score) in candidate.matchScores.values()) {
@@ -599,6 +608,9 @@ actor {
     };
   };
 
+  // ── ATS Pipeline ──────────────────────────────────────────────────────────
+
+  /// Move a candidate to the next pipeline stage. Recruiter (user) or Admin only.
   public shared ({ caller }) func moveCandidateStage(
     candidateId : Nat,
     newStatus : CandidateStatus,
@@ -638,6 +650,7 @@ actor {
     };
   };
 
+  /// Get candidates by pipeline stage for a given job. Any authenticated user.
   public query ({ caller }) func getCandidatesByStage(jobId : Nat, stage : CandidateStatus) : async [Candidate] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can query pipeline stages");
@@ -655,6 +668,9 @@ actor {
     result.toArray();
   };
 
+  // ── Interview Scheduling ──────────────────────────────────────────────────
+
+  /// Create an interview record. Any authenticated user.
   public shared ({ caller }) func createInterview(
     candidateId : Nat,
     jobId : Nat,
@@ -666,22 +682,12 @@ actor {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can schedule interviews");
     };
-    let candidateName = switch (candidates.get(candidateId)) {
-      case (null) Runtime.trap("Candidate not found");
-      case (?c) c.name;
-    };
-    let jobTitle = switch (jobRequisitions.get(jobId)) {
-      case (null) Runtime.trap("Job not found");
-      case (?j) j.title;
-    };
     let id = nextInterviewId;
     nextInterviewId += 1;
     let interview : Interview = {
       id;
       candidateId;
-      candidateName;
       jobId;
-      jobTitle;
       dateTime;
       interviewer;
       interviewType;
@@ -692,6 +698,7 @@ actor {
     id;
   };
 
+  /// Update an interview record. Any authenticated user.
   public shared ({ caller }) func updateInterview(
     id : Nat,
     dateTime : Time.Time,
@@ -709,9 +716,7 @@ actor {
         let updated : Interview = {
           id;
           candidateId = existing.candidateId;
-          candidateName = existing.candidateName;
           jobId = existing.jobId;
-          jobTitle = existing.jobTitle;
           dateTime;
           interviewer;
           interviewType;
@@ -723,6 +728,7 @@ actor {
     };
   };
 
+  /// Delete an interview. Admin only.
   public shared ({ caller }) func deleteInterview(id : Nat) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can delete interviews");
@@ -733,6 +739,7 @@ actor {
     interviews.remove(id);
   };
 
+  /// Get a single interview. Any authenticated user.
   public query ({ caller }) func getInterview(id : Nat) : async ?Interview {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view interviews");
@@ -740,17 +747,7 @@ actor {
     interviews.get(id);
   };
 
-  public query ({ caller }) func listInterviews() : async [Interview] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can list interviews");
-    };
-    let result = List.empty<Interview>();
-    for ((_, iv) in interviews.entries()) {
-      result.add(iv);
-    };
-    result.toArray();
-  };
-
+  /// List interviews for a candidate. Any authenticated user.
   public query ({ caller }) func getInterviewsByCandidate(candidateId : Nat) : async [Interview] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can list interviews");
@@ -762,6 +759,9 @@ actor {
     result.toArray();
   };
 
+  // ── Communication Templates ───────────────────────────────────────────────
+
+  /// Create a communication template. Admin only.
   public shared ({ caller }) func createTemplate(
     name : Text,
     subject : Text,
@@ -778,6 +778,7 @@ actor {
     id;
   };
 
+  /// Update a communication template. Admin only.
   public shared ({ caller }) func updateTemplate(
     id : Nat,
     name : Text,
@@ -794,6 +795,7 @@ actor {
     communicationTemplates.add(id, { id; name; subject; body; category });
   };
 
+  /// Delete a communication template. Admin only.
   public shared ({ caller }) func deleteTemplate(id : Nat) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can delete templates");
@@ -804,6 +806,7 @@ actor {
     communicationTemplates.remove(id);
   };
 
+  /// Get a single template. Any authenticated user.
   public query ({ caller }) func getTemplate(id : Nat) : async ?CommunicationTemplate {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view templates");
@@ -811,6 +814,7 @@ actor {
     communicationTemplates.get(id);
   };
 
+  /// List all templates. Any authenticated user.
   public query ({ caller }) func listTemplates() : async [CommunicationTemplate] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can list templates");
@@ -821,6 +825,8 @@ actor {
     };
     result.toArray();
   };
+
+  // ── Offer Letter Generation ───────────────────────────────────────────────
 
   func generateOfferText(
     candidateName : Text,
@@ -839,6 +845,7 @@ actor {
     # "Sincerely,\nThe Hiring Team\n";
   };
 
+  /// Generate and store an offer letter. Any authenticated user (recruiter).
   public shared ({ caller }) func createOfferLetter(
     candidateId : Nat,
     jobId : Nat,
@@ -875,6 +882,7 @@ actor {
     id;
   };
 
+  /// Update offer letter status. Any authenticated user.
   public shared ({ caller }) func updateOfferStatus(id : Nat, status : OfferStatus) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can update offer status");
@@ -898,6 +906,7 @@ actor {
     };
   };
 
+  /// Delete an offer letter. Admin only.
   public shared ({ caller }) func deleteOfferLetter(id : Nat) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can delete offer letters");
@@ -908,6 +917,7 @@ actor {
     offerLetters.remove(id);
   };
 
+  /// Get an offer letter. Any authenticated user.
   public query ({ caller }) func getOfferLetter(id : Nat) : async ?OfferLetter {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view offer letters");
@@ -915,17 +925,7 @@ actor {
     offerLetters.get(id);
   };
 
-  public query ({ caller }) func listOfferLetters() : async [OfferLetter] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can list offer letters");
-    };
-    let result = List.empty<OfferLetter>();
-    for ((_, o) in offerLetters.entries()) {
-      result.add(o);
-    };
-    result.toArray();
-  };
-
+  /// List offer letters for a candidate. Any authenticated user.
   public query ({ caller }) func getOffersByCandidate(candidateId : Nat) : async [OfferLetter] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can list offer letters");
@@ -937,16 +937,21 @@ actor {
     result.toArray();
   };
 
+  // ── Analytics ─────────────────────────────────────────────────────────────
+
+  /// Get recruiter analytics. Any authenticated user.
   public query ({ caller }) func getAnalytics() : async AnalyticsResult {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view analytics");
     };
 
+    // Total open jobs
     var totalOpenJobs : Nat = 0;
     for ((_, job) in jobRequisitions.entries()) {
       if (job.status == #open) totalOpenJobs += 1;
     };
 
+    // Candidates per job
     let jobCandidateCount = Map.empty<Nat, Nat>();
     for ((_, c) in candidates.entries()) {
       for (jid in c.appliedJobIds.values()) {
@@ -962,6 +967,7 @@ actor {
       perJobList.add((jid, count));
     };
 
+    // Candidates per stage
     var countNew : Nat = 0;
     var countScreening : Nat = 0;
     var countShortlisted : Nat = 0;
@@ -990,10 +996,12 @@ actor {
       ("Rejected", countRejected),
     ];
 
+    // Average time-to-hire (days from createdAt to last transition to #hired)
     var totalHireDays : Int = 0;
     var hiredCount : Nat = 0;
     for ((_, c) in candidates.entries()) {
       if (c.status == #hired) {
+        // Find the last transition to hired
         var hiredTime : ?Time.Time = null;
         for (t in c.pipelineLog.values()) {
           if (t.toStatus == #hired) hiredTime := ?t.timestamp;
@@ -1015,6 +1023,7 @@ actor {
       totalHireDays.toFloat() / hiredCount.toFloat();
     };
 
+    // Top scoring candidates (top 10 by max match score)
     let scoredList = List.empty<(Nat, Nat)>();
     for ((_, c) in candidates.entries()) {
       var maxScore : Nat = 0;
@@ -1023,6 +1032,7 @@ actor {
       };
       if (maxScore > 0) scoredList.add((c.id, maxScore));
     };
+    // Sort descending by score (simple insertion approach via array sort)
     let scoredArr = scoredList.toArray();
     let sorted = scoredArr.sort(
       func(a, b) {
@@ -1037,74 +1047,6 @@ actor {
       candidatesPerStage = stageList;
       averageTimeToHireDays = avgTimeToHire;
       topScoringCandidates = top10;
-      last30DaysApplications = [];
-      pipelineStageDistribution = stageList;
-      topJobsByVolume = perJobList.toArray();
-      avgTimeToHirePerJob = [];
-    };
-  };
-
-  // ── New Interview Scheduling API with Consistent Types ────────────────────
-
-  public shared ({ caller }) func createInterview2(interview : InterviewInput) : async Nat {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can schedule interviews");
-    };
-    let candidateName = switch (candidates.get(interview.candidateId)) {
-      case (null) Runtime.trap("Candidate not found");
-      case (?c) c.name;
-    };
-    let jobTitle = switch (jobRequisitions.get(interview.jobId)) {
-      case (null) Runtime.trap("Job not found");
-      case (?j) j.title;
-    };
-    let id = nextInterviewId;
-    nextInterviewId += 1;
-    let newInterview : Interview = {
-      id;
-      candidateId = interview.candidateId;
-      candidateName;
-      jobId = interview.jobId;
-      jobTitle;
-      dateTime = interview.dateTime;
-      interviewer = interview.interviewer;
-      interviewType = interview.interviewType;
-      status = #scheduled;
-      notes = interview.notes;
-    };
-    interviews.add(id, newInterview);
-    id;
-  };
-
-  public shared ({ caller }) func updateInterview2(
-    id : Nat,
-    dateTime : Time.Time,
-    interviewer : Text,
-    interviewType : InterviewType,
-    status : InterviewStatus,
-    notes : Text,
-  ) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can update interviews");
-    };
-
-    switch (interviews.get(id)) {
-      case (null) Runtime.trap("Interview not found");
-      case (?existing) {
-        let updated : Interview = {
-          id;
-          candidateId = existing.candidateId;
-          candidateName = existing.candidateName;
-          jobId = existing.jobId;
-          jobTitle = existing.jobTitle;
-          dateTime;
-          interviewer;
-          interviewType;
-          status;
-          notes;
-        };
-        interviews.add(id, updated);
-      };
     };
   };
 };

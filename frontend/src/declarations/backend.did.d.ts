@@ -13,13 +13,9 @@ import type { Principal } from '@icp-sdk/core/principal';
 export interface AnalyticsResult {
   'topScoringCandidates' : Array<[bigint, bigint]>,
   'totalOpenJobs' : bigint,
-  'avgTimeToHirePerJob' : Array<[bigint, number]>,
   'totalCandidatesPerJob' : Array<[bigint, bigint]>,
-  'last30DaysApplications' : Array<bigint>,
   'candidatesPerStage' : Array<[string, bigint]>,
-  'topJobsByVolume' : Array<[bigint, bigint]>,
   'averageTimeToHireDays' : number,
-  'pipelineStageDistribution' : Array<[string, bigint]>,
 }
 export interface Candidate {
   'id' : bigint,
@@ -53,16 +49,6 @@ export interface CommunicationTemplate {
 export interface Interview {
   'id' : bigint,
   'status' : InterviewStatus,
-  'interviewer' : string,
-  'jobId' : bigint,
-  'jobTitle' : string,
-  'interviewType' : InterviewType,
-  'notes' : string,
-  'candidateName' : string,
-  'dateTime' : Time,
-  'candidateId' : bigint,
-}
-export interface InterviewInput {
   'interviewer' : string,
   'jobId' : bigint,
   'interviewType' : InterviewType,
@@ -132,78 +118,170 @@ export type UserRole = { 'admin' : null } |
   { 'guest' : null };
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  /**
+   * / Apply a candidate to a job. Any authenticated user.
+   */
   'applyToJob' : ActorMethod<[bigint, bigint], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  /**
+   * / Calculate and store a match score for a candidate against a job. Any authenticated user.
+   */
   'calculateMatchScore' : ActorMethod<[bigint, bigint], bigint>,
+  /**
+   * / Create a candidate profile. Any authenticated user (recruiter submitting on behalf).
+   */
   'createCandidate' : ActorMethod<
     [string, string, string, string, Array<string>, bigint],
     bigint
   >,
+  /**
+   * / Create an interview record. Any authenticated user.
+   */
   'createInterview' : ActorMethod<
     [bigint, bigint, Time, string, InterviewType, string],
     bigint
   >,
-  'createInterview2' : ActorMethod<[InterviewInput], bigint>,
+  /**
+   * / Create a new job requisition. Admin only.
+   */
   'createJob' : ActorMethod<
     [string, string, string, JobType, string, Array<string>, bigint],
     bigint
   >,
+  /**
+   * / Generate and store an offer letter. Any authenticated user (recruiter).
+   */
   'createOfferLetter' : ActorMethod<
     [bigint, bigint, number, Time, string],
     bigint
   >,
+  /**
+   * / Create a communication template. Admin only.
+   */
   'createTemplate' : ActorMethod<[string, string, string, string], bigint>,
+  /**
+   * / Delete a candidate. Admin only.
+   */
   'deleteCandidate' : ActorMethod<[bigint], undefined>,
+  /**
+   * / Delete an interview. Admin only.
+   */
   'deleteInterview' : ActorMethod<[bigint], undefined>,
+  /**
+   * / Delete a job requisition. Admin only.
+   */
   'deleteJob' : ActorMethod<[bigint], undefined>,
+  /**
+   * / Delete an offer letter. Admin only.
+   */
   'deleteOfferLetter' : ActorMethod<[bigint], undefined>,
+  /**
+   * / Delete a communication template. Admin only.
+   */
   'deleteTemplate' : ActorMethod<[bigint], undefined>,
+  /**
+   * / Get recruiter analytics. Any authenticated user.
+   */
   'getAnalytics' : ActorMethod<[], AnalyticsResult>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  /**
+   * / Get a single candidate. Any authenticated user.
+   */
   'getCandidate' : ActorMethod<[bigint], [] | [Candidate]>,
+  /**
+   * / Get candidates by job ID. Any authenticated user.
+   */
   'getCandidatesByJob' : ActorMethod<[bigint], Array<Candidate>>,
+  /**
+   * / Get candidates by pipeline stage for a given job. Any authenticated user.
+   */
   'getCandidatesByStage' : ActorMethod<
     [bigint, CandidateStatus],
     Array<Candidate>
   >,
+  /**
+   * / Get a single interview. Any authenticated user.
+   */
   'getInterview' : ActorMethod<[bigint], [] | [Interview]>,
+  /**
+   * / List interviews for a candidate. Any authenticated user.
+   */
   'getInterviewsByCandidate' : ActorMethod<[bigint], Array<Interview>>,
+  /**
+   * / Get a single job requisition. Any authenticated user.
+   */
   'getJob' : ActorMethod<[bigint], [] | [JobRequisition]>,
+  /**
+   * / Get an offer letter. Any authenticated user.
+   */
   'getOfferLetter' : ActorMethod<[bigint], [] | [OfferLetter]>,
+  /**
+   * / List offer letters for a candidate. Any authenticated user.
+   */
   'getOffersByCandidate' : ActorMethod<[bigint], Array<OfferLetter>>,
+  /**
+   * / Get a single template. Any authenticated user.
+   */
   'getTemplate' : ActorMethod<[bigint], [] | [CommunicationTemplate]>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  /**
+   * / List all candidates. Any authenticated user.
+   */
   'listCandidates' : ActorMethod<[], Array<Candidate>>,
-  'listInterviews' : ActorMethod<[], Array<Interview>>,
+  /**
+   * / List all job requisitions. Any authenticated user.
+   */
   'listJobs' : ActorMethod<[], Array<JobRequisition>>,
-  'listOfferLetters' : ActorMethod<[], Array<OfferLetter>>,
+  /**
+   * / List all templates. Any authenticated user.
+   */
   'listTemplates' : ActorMethod<[], Array<CommunicationTemplate>>,
+  /**
+   * / Move a candidate to the next pipeline stage. Recruiter (user) or Admin only.
+   */
   'moveCandidateStage' : ActorMethod<
     [bigint, CandidateStatus, string],
     undefined
   >,
+  /**
+   * / Parse a resume text and extract structured data. No auth required (public utility).
+   */
   'parseResume' : ActorMethod<[string], ParsedResume>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  /**
+   * / Update candidate details. Any authenticated user.
+   */
   'updateCandidate' : ActorMethod<
     [bigint, string, string, string, string, Array<string>, bigint],
     undefined
   >,
+  /**
+   * / Update an interview record. Any authenticated user.
+   */
   'updateInterview' : ActorMethod<
     [bigint, Time, string, InterviewType, InterviewStatus, string],
     undefined
   >,
-  'updateInterview2' : ActorMethod<
-    [bigint, Time, string, InterviewType, InterviewStatus, string],
-    undefined
-  >,
+  /**
+   * / Update an existing job requisition. Admin only.
+   */
   'updateJob' : ActorMethod<
     [bigint, string, string, string, JobType, string, Array<string>, bigint],
     undefined
   >,
+  /**
+   * / Update job status. Admin only.
+   */
   'updateJobStatus' : ActorMethod<[bigint, JobStatus], undefined>,
+  /**
+   * / Update offer letter status. Any authenticated user.
+   */
   'updateOfferStatus' : ActorMethod<[bigint, OfferStatus], undefined>,
+  /**
+   * / Update a communication template. Admin only.
+   */
   'updateTemplate' : ActorMethod<
     [bigint, string, string, string, string],
     undefined

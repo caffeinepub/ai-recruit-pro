@@ -19,14 +19,6 @@ export const InterviewType = IDL.Variant({
   'phone' : IDL.Null,
   'onSite' : IDL.Null,
 });
-export const InterviewInput = IDL.Record({
-  'interviewer' : IDL.Text,
-  'jobId' : IDL.Nat,
-  'interviewType' : InterviewType,
-  'notes' : IDL.Text,
-  'dateTime' : Time,
-  'candidateId' : IDL.Nat,
-});
 export const JobType = IDL.Variant({
   'contract' : IDL.Null,
   'partTime' : IDL.Null,
@@ -35,13 +27,9 @@ export const JobType = IDL.Variant({
 export const AnalyticsResult = IDL.Record({
   'topScoringCandidates' : IDL.Vec(IDL.Tuple(IDL.Nat, IDL.Nat)),
   'totalOpenJobs' : IDL.Nat,
-  'avgTimeToHirePerJob' : IDL.Vec(IDL.Tuple(IDL.Nat, IDL.Float64)),
   'totalCandidatesPerJob' : IDL.Vec(IDL.Tuple(IDL.Nat, IDL.Nat)),
-  'last30DaysApplications' : IDL.Vec(IDL.Nat),
   'candidatesPerStage' : IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat)),
-  'topJobsByVolume' : IDL.Vec(IDL.Tuple(IDL.Nat, IDL.Nat)),
   'averageTimeToHireDays' : IDL.Float64,
-  'pipelineStageDistribution' : IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat)),
 });
 export const UserProfile = IDL.Record({
   'name' : IDL.Text,
@@ -88,10 +76,8 @@ export const Interview = IDL.Record({
   'status' : InterviewStatus,
   'interviewer' : IDL.Text,
   'jobId' : IDL.Nat,
-  'jobTitle' : IDL.Text,
   'interviewType' : InterviewType,
   'notes' : IDL.Text,
-  'candidateName' : IDL.Text,
   'dateTime' : Time,
   'candidateId' : IDL.Nat,
 });
@@ -158,7 +144,6 @@ export const idlService = IDL.Service({
       [IDL.Nat],
       [],
     ),
-  'createInterview2' : IDL.Func([InterviewInput], [IDL.Nat], []),
   'createJob' : IDL.Func(
       [
         IDL.Text,
@@ -222,9 +207,7 @@ export const idlService = IDL.Service({
     ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'listCandidates' : IDL.Func([], [IDL.Vec(Candidate)], ['query']),
-  'listInterviews' : IDL.Func([], [IDL.Vec(Interview)], ['query']),
   'listJobs' : IDL.Func([], [IDL.Vec(JobRequisition)], ['query']),
-  'listOfferLetters' : IDL.Func([], [IDL.Vec(OfferLetter)], ['query']),
   'listTemplates' : IDL.Func([], [IDL.Vec(CommunicationTemplate)], ['query']),
   'moveCandidateStage' : IDL.Func([IDL.Nat, CandidateStatus, IDL.Text], [], []),
   'parseResume' : IDL.Func([IDL.Text], [ParsedResume], ['query']),
@@ -243,11 +226,6 @@ export const idlService = IDL.Service({
       [],
     ),
   'updateInterview' : IDL.Func(
-      [IDL.Nat, Time, IDL.Text, InterviewType, InterviewStatus, IDL.Text],
-      [],
-      [],
-    ),
-  'updateInterview2' : IDL.Func(
       [IDL.Nat, Time, IDL.Text, InterviewType, InterviewStatus, IDL.Text],
       [],
       [],
@@ -289,14 +267,6 @@ export const idlFactory = ({ IDL }) => {
     'phone' : IDL.Null,
     'onSite' : IDL.Null,
   });
-  const InterviewInput = IDL.Record({
-    'interviewer' : IDL.Text,
-    'jobId' : IDL.Nat,
-    'interviewType' : InterviewType,
-    'notes' : IDL.Text,
-    'dateTime' : Time,
-    'candidateId' : IDL.Nat,
-  });
   const JobType = IDL.Variant({
     'contract' : IDL.Null,
     'partTime' : IDL.Null,
@@ -305,13 +275,9 @@ export const idlFactory = ({ IDL }) => {
   const AnalyticsResult = IDL.Record({
     'topScoringCandidates' : IDL.Vec(IDL.Tuple(IDL.Nat, IDL.Nat)),
     'totalOpenJobs' : IDL.Nat,
-    'avgTimeToHirePerJob' : IDL.Vec(IDL.Tuple(IDL.Nat, IDL.Float64)),
     'totalCandidatesPerJob' : IDL.Vec(IDL.Tuple(IDL.Nat, IDL.Nat)),
-    'last30DaysApplications' : IDL.Vec(IDL.Nat),
     'candidatesPerStage' : IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat)),
-    'topJobsByVolume' : IDL.Vec(IDL.Tuple(IDL.Nat, IDL.Nat)),
     'averageTimeToHireDays' : IDL.Float64,
-    'pipelineStageDistribution' : IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat)),
   });
   const UserProfile = IDL.Record({
     'name' : IDL.Text,
@@ -358,10 +324,8 @@ export const idlFactory = ({ IDL }) => {
     'status' : InterviewStatus,
     'interviewer' : IDL.Text,
     'jobId' : IDL.Nat,
-    'jobTitle' : IDL.Text,
     'interviewType' : InterviewType,
     'notes' : IDL.Text,
-    'candidateName' : IDL.Text,
     'dateTime' : Time,
     'candidateId' : IDL.Nat,
   });
@@ -428,7 +392,6 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Nat],
         [],
       ),
-    'createInterview2' : IDL.Func([InterviewInput], [IDL.Nat], []),
     'createJob' : IDL.Func(
         [
           IDL.Text,
@@ -492,9 +455,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'listCandidates' : IDL.Func([], [IDL.Vec(Candidate)], ['query']),
-    'listInterviews' : IDL.Func([], [IDL.Vec(Interview)], ['query']),
     'listJobs' : IDL.Func([], [IDL.Vec(JobRequisition)], ['query']),
-    'listOfferLetters' : IDL.Func([], [IDL.Vec(OfferLetter)], ['query']),
     'listTemplates' : IDL.Func([], [IDL.Vec(CommunicationTemplate)], ['query']),
     'moveCandidateStage' : IDL.Func(
         [IDL.Nat, CandidateStatus, IDL.Text],
@@ -517,11 +478,6 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'updateInterview' : IDL.Func(
-        [IDL.Nat, Time, IDL.Text, InterviewType, InterviewStatus, IDL.Text],
-        [],
-        [],
-      ),
-    'updateInterview2' : IDL.Func(
         [IDL.Nat, Time, IDL.Text, InterviewType, InterviewStatus, IDL.Text],
         [],
         [],

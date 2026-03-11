@@ -1,54 +1,93 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-28T06:01:32.561Z",
-  "summary": "The diff shows minimal changes: a new migration module (backend/migration.mo) and modifications to backend/main.mo and project_state.json. The migration adds candidateName and jobTitle fields to the Interview type. The backend/main.mo shows Interview type updated with candidateName and jobTitle, plus AnalyticsResult type. However, the diff is heavily truncated and no frontend files are present. REQ-23 through REQ-26 all require significant frontend work (pages, charts, forms, React Query integration) and substantial backend analytics endpoints — none of which are visible in the diff.",
+  "generatedAt": "2026-02-28T05:41:58.002Z",
+  "summary": "The diff implements a comprehensive AI-powered recruitment management platform with a Motoko backend and React frontend. Most requirements are covered, but several specific acceptance criteria have gaps. The Settings page navigation item is missing from the sidebar nav array. The Interviews page calendar view and the Pipeline page drag-and-drop functionality could not be confirmed from the truncated diffs. The hireiq-icon.dim_64x64.png favicon usage for REQ-22 is not evidenced. The Dashboard 'interviews this week' metric card shows a hardcoded 0.",
   "missing_requirements": [
     {
-      "id": "REQ-23",
-      "requirement": "Build an Interviews page with list/calendar toggle, interview scheduling form, edit capability, and mark completed/cancelled actions",
-      "reason": "No frontend Interviews page file is present in the diff. Only a backend migration adding candidateName/jobTitle fields to Interview is visible. No list view, calendar toggle, form/dialog, edit, or mark-complete/cancel UI is implemented in the diff.",
+      "id": "REQ-11",
+      "requirement": "Sidebar navigation must include a Settings section",
+      "reason": "The navItems array in Layout.tsx lists only 8 items (Dashboard, Jobs, Candidates, Pipeline, Interviews, Analytics, Templates, Offers) and does not include a Settings entry.",
       "evidence": [
-        "backend/migration.mo",
-        "backend/main.mo"
+        "frontend/src/components/Layout.tsx"
       ]
     },
     {
-      "id": "REQ-24",
-      "requirement": "Build an Offers page with offer letter list, generation form with custom clauses, formatted preview panel, and accept/decline actions",
-      "reason": "No frontend Offers page file is present in the diff. The OfferLetter type already existed. No new offers UI, form, preview panel, or status update actions are visible.",
+      "id": "REQ-16",
+      "requirement": "Interviews page must display a calendar toggle view in addition to the list view",
+      "reason": "The Interviews page file is not included in the visible diff, so a calendar view implementation cannot be confirmed.",
+      "evidence": []
+    },
+    {
+      "id": "REQ-15",
+      "requirement": "Kanban Pipeline board must support drag-and-drop between columns to move candidates through stages",
+      "reason": "The Pipeline page file is not included in the visible diff, so drag-and-drop implementation cannot be confirmed.",
+      "evidence": []
+    },
+    {
+      "id": "REQ-12",
+      "requirement": "Dashboard metric card for total interviews this week must display real data fetched from backend",
+      "reason": "Dashboard.tsx hardcodes interviewsThisWeek = 0 with a comment indicating it is not actually fetched from backend data.",
       "evidence": [
-        "backend/main.mo"
+        "frontend/src/pages/Dashboard.tsx"
       ]
     },
     {
-      "id": "REQ-25",
-      "requirement": "Build an Analytics page with line chart (applications over time), donut chart (pipeline stage distribution), bar chart (top jobs by volume), and time-to-hire table",
-      "reason": "No frontend Analytics page file is present in the diff. The backend/main.mo is truncated and shows an AnalyticsResult type stub but no analytics query endpoints are confirmed. No charts or data table UI is implemented.",
-      "evidence": [
-        "backend/main.mo"
-      ]
-    },
-    {
-      "id": "REQ-26",
-      "requirement": "Enhance the Dashboard page with live summary metric cards, pipeline stage bar chart, and top 5 AI-matched candidates list",
-      "reason": "No frontend Dashboard page modifications are present in the diff. No summary cards, bar chart, or top candidates ranked list updates are visible.",
+      "id": "REQ-22",
+      "requirement": "Use the generated hireiq-icon.dim_64x64.png as the browser tab favicon",
+      "reason": "No evidence in the diff of favicon configuration referencing hireiq-icon.dim_64x64.png. The logo is used in the sidebar but favicon usage is not shown anywhere.",
       "evidence": []
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Migration module (backend/migration.mo) for upgrading Interview records with candidateName and jobTitle fields",
-      "reason": "The build request does not mention a migration module or any data migration concern. This was added without being requested.",
+      "description": "Profile setup modal with name, email, and role fields shown after login",
+      "reason": "The build request does not specify a post-login profile setup flow. App.tsx includes a ProfileSetupModal component that was not requested.",
       "evidence": [
-        "backend/migration.mo"
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "description": "caffeine.ai branding and referral link in the login screen footer",
+      "reason": "The build request does not mention any caffeine.ai branding or attribution links in the UI.",
+      "evidence": [
+        "frontend/src/App.tsx"
       ]
     }
   ],
-  "confidence": 0.55,
+  "confidence": 0.62,
   "changed_files": [
+    "all_files_summary.json",
     "backend/main.mo",
-    "backend/migration.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/AIScoreBadge.tsx",
+    "frontend/src/components/CandidateDetail.tsx",
+    "frontend/src/components/CandidateForm.tsx",
+    "frontend/src/components/ChatbotWidget.tsx",
+    "frontend/src/components/InterviewForm.tsx",
+    "frontend/src/components/JobForm.tsx",
+    "frontend/src/components/Layout.tsx",
+    "frontend/src/components/OfferForm.tsx",
+    "frontend/src/components/TemplateForm.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/lib/utils.ts",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/Analytics.tsx",
+    "frontend/src/pages/Candidates.tsx",
+    "frontend/src/pages/Dashboard.tsx",
+    "frontend/src/pages/Interviews.tsx",
+    "frontend/src/pages/Jobs.tsx",
+    "frontend/src/pages/Offers.tsx",
+    "frontend/src/pages/Pipeline.tsx",
+    "frontend/src/pages/Templates.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
     "project_state.json"
   ]
 }

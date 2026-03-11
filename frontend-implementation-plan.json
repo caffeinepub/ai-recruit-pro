@@ -1,88 +1,310 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Build out remaining features: interview scheduling, offer letter generation, and recruiter analytics",
+  "title": "HireIQ Frontend - AI-Powered Recruitment Management Platform",
   "requirements": [
     {
-      "id": "REQ-23",
-      "summary": "Build an Interviews page with list/calendar toggle views, interview scheduling form, and status management for interviews",
+      "id": "REQ-11",
+      "summary": "Build sidebar navigation layout with header showing app logo, user role, and notification icon",
       "acceptanceCriteria": [
-        "Interviews page shows a list view of all scheduled interviews with candidate name, job title, interview type, date/time, interviewer, and status",
-        "A calendar toggle view is available that renders interviews on a calendar grid",
-        "A form/dialog allows scheduling a new interview with fields: candidate, job, date/time, interviewer, interview type (phone/video/on-site), status, and notes",
-        "Existing interviews can be edited via the same form",
-        "Each interview has actions to mark it as completed or cancelled",
-        "Data is fetched from and persisted to the backend via React Query"
+        "Sidebar navigation renders all listed sections",
+        "Active section is visually highlighted",
+        "Header shows app logo, user role, and notification icon",
+        "Layout is responsive and collapses sidebar on smaller screens"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/Interviews.tsx",
-          "operation": "modify",
-          "description": "Replace the current Interviews page implementation with a comprehensive view that includes: a list view showing all scheduled interviews with all required fields (candidate name, job title, interview type, date/time, interviewer, status); a calendar toggle that switches between list and calendar grid views; inline actions for each interview to mark as completed or cancelled using status update mutations; and integration with the InterviewForm component for creating and editing interviews. Use the existing useListInterviews, useCreateInterview, and useUpdateInterview hooks from useQueries.ts. Add view toggle state and calendar rendering logic using a date-based grid layout."
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "create",
+          "description": "Create main layout component with sidebar navigation (Dashboard, Jobs, Candidates, Pipeline, Interviews, Analytics, Templates, Offers, Settings) and top header displaying the generated logo asset frontend/public/assets/generated/hireiq-logo.dim_200x60.png, user role from authorization component, and notification bell icon. Implement responsive behavior that collapses sidebar on smaller screens."
         },
         {
-          "path": "frontend/src/components/InterviewForm.tsx",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Enhance the InterviewForm component to support all required fields and validation: ensure candidate selection dropdown is populated from useListCandidates; ensure job selection dropdown is populated from useListJobs; add date/time picker for scheduling; add interviewer text input; add interview type radio group or select for phone/video/on-site options; add status dropdown for scheduled/completed/cancelled; add notes textarea; wire the form to use createInterview2 mutation for creating interviews and updateInterview2 mutation for editing; populate form fields when editing an existing interview; validate that all required fields are filled before submission."
-        }
-      ]
-    },
-    {
-      "id": "REQ-24",
-      "summary": "Build an Offers page to list, generate, preview, and manage offer letters with status tracking",
-      "acceptanceCriteria": [
-        "Offers page displays a table/list of all offer letters with columns for candidate name, job title, salary, start date, and a color-coded status badge (pending/accepted/declined)",
-        "A form allows generating a new offer letter by selecting candidate ID, job ID, entering salary, start date, and optional custom clauses",
-        "A formatted offer letter preview panel renders the generated offer text with all populated fields",
-        "Each offer has inline actions to update its status to accepted or declined",
-        "Offer data is fetched from and persisted to the backend via React Query"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/Offers.tsx",
-          "operation": "modify",
-          "description": "Replace the current Offers page implementation with a comprehensive view that displays all offer letters in a table format with columns for candidate name (resolved from candidateId), job title (resolved from jobId), salary, start date, and a color-coded status badge using teal for pending, amber for accepted, and red for declined. Add inline action buttons or dropdown menus for each offer to update status to accepted or declined using the useUpdateOfferStatus mutation hook. Integrate the OfferForm component for creating new offer letters. Use useListOfferLetters to fetch all offers, useListCandidates and useListJobs to resolve names and titles for display. Add loading and error states with appropriate UI feedback."
+          "description": "Wrap the application router with the Layout component to apply sidebar and header globally. Use the authorization component to ensure users must be logged in before seeing application data. When logging out, clear all cached application data including user profile."
         },
         {
-          "path": "frontend/src/components/OfferForm.tsx",
+          "path": "frontend/public/index.html",
           "operation": "modify",
-          "description": "Enhance the OfferForm component to include: a candidate selection dropdown populated from useListCandidates; a job selection dropdown populated from useListJobs; a salary number input field; a start date picker; a custom clauses textarea for optional additional terms; a formatted offer letter preview section that displays the generated letterText field returned from the backend after creation; wire the form to use the useCreateOfferLetter mutation with all required fields (candidateId, jobId, salary, startDate, clauses); ensure the preview panel renders the offer letter text with proper formatting and styling; validate that candidate, job, salary, and start date are provided before submission."
+          "description": "Update the favicon link to use the generated icon asset frontend/public/assets/generated/hireiq-icon.dim_64x64.png."
         }
       ]
     },
     {
-      "id": "REQ-25",
-      "summary": "Build an Analytics page with visual charts for applications over time, pipeline distribution, top jobs, and time-to-hire metrics",
+      "id": "REQ-12",
+      "summary": "Build Dashboard page displaying recruiter analytics with metrics, bar chart, and top AI-matched candidates",
       "acceptanceCriteria": [
-        "Analytics page renders a line chart showing the number of new candidate applications per day over the last 30 days",
-        "A donut/pie chart shows the distribution of candidates across all pipeline stages",
-        "A bar chart shows the top jobs ranked by total application volume",
-        "A data table shows average time-to-hire (days from application to hired status) per job",
-        "All chart data is fetched from backend analytics query functions via React Query",
-        "Charts are responsive and styled consistently with the dark-mode theme"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/Analytics.tsx",
-          "operation": "modify",
-          "description": "Enhance the existing Analytics page to include all required charts and visualizations: ensure the line chart renders daily application counts from analyticsData.last30DaysApplications with proper date labels for the last 30 days; ensure the donut/pie chart displays pipeline stage distribution using analyticsData.pipelineStageDistribution with color-coded segments for each stage; ensure the bar chart shows top jobs by application volume using analyticsData.topJobsByVolume, resolving job titles from useListJobs; add a data table section displaying average time-to-hire per job using analyticsData.avgTimeToHirePerJob, showing job title and days; use Recharts library components (LineChart, PieChart, BarChart) for all visualizations; apply dark-mode-first styling with teal and amber accent colors; ensure all charts are responsive and handle loading/error states gracefully; fetch data using the existing useGetAnalytics hook."
-        }
-      ]
-    },
-    {
-      "id": "REQ-26",
-      "summary": "Enhance the Dashboard page with live recruiter analytics summary cards, pipeline bar chart, and top AI-matched candidates list",
-      "acceptanceCriteria": [
-        "Dashboard shows four summary metric cards: total open jobs, total active candidates, interviews scheduled this week, and average time-to-hire in days",
-        "A bar chart visualizes the count of candidates in each pipeline stage",
-        "A ranked list displays the top 5 candidates by AI match score across all open jobs, showing candidate name, job title, and score",
-        "All data is live-fetched from backend endpoints via React Query with loading and error states"
+        "Metric cards display real data fetched from backend",
+        "Bar chart renders candidate counts per pipeline stage",
+        "Top 5 AI-matched candidates are listed with scores and job names"
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/Dashboard.tsx",
+          "operation": "create",
+          "description": "Create Dashboard page displaying the generated banner asset frontend/public/assets/generated/dashboard-banner.dim_1200x300.png as a decorative header. Show metric cards for total open jobs, total active candidates, total interviews this week, and average time-to-hire fetched via getAnalytics backend capability. Render a bar chart of candidates per pipeline stage using the analytics data. Display a ranked list of top 5 AI-matched candidates across all open jobs with scores and job titles."
+        },
+        {
+          "path": "frontend/src/hooks/useAnalytics.ts",
+          "operation": "create",
+          "description": "Create React Query hook to fetch analytics data from backend getAnalytics capability. Return analytics including totalOpenJobs, candidatesPerStage, averageTimeToHireDays, and topScoringCandidates with proper typing from backend interface."
+        }
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "summary": "Build Jobs management page with searchable table, slide-over form, and View Candidates navigation",
+      "acceptanceCriteria": [
+        "Jobs table displays all requisitions with search and filter by status/department",
+        "Create/edit form covers all job fields and submits successfully",
+        "Status badge reflects current job status",
+        "View Candidates navigates to the pipeline filtered by that job"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Jobs.tsx",
+          "operation": "create",
+          "description": "Create Jobs page with searchable and filterable table of job requisitions displaying title, department, location, job type, status badges, and actions. Fetch jobs via listJobs backend capability. Include search by title and filters for status and department. Provide 'View Candidates' action that navigates to Pipeline page with job filter applied. Wire route in App.tsx router."
+        },
+        {
+          "path": "frontend/src/components/JobForm.tsx",
+          "operation": "create",
+          "description": "Create slide-over form component for creating or editing jobs with fields: title, department, location, jobType (dropdown), description (textarea), requiredSkills (tag input), experienceLevel (number), and status (dropdown for edit mode). Submit via createJob or updateJob backend capabilities. Validate all required fields before submission."
+        },
+        {
+          "path": "frontend/src/hooks/useJobs.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for job operations: useListJobs (query listJobs), useCreateJob (mutation createJob), useUpdateJob (mutation updateJob), useUpdateJobStatus (mutation updateJobStatus), and useDeleteJob (mutation deleteJob, admin-only). Handle authorization errors gracefully with user-friendly messages."
+        }
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "summary": "Build Candidates management page with searchable table, detail panel, and AI resume parsing",
+      "acceptanceCriteria": [
+        "Candidate table is searchable and shows AI score and stage",
+        "Detail panel shows all profile fields, skill tags, and stage history",
+        "Resume paste area triggers backend parsing and populates the form",
+        "AI match score is visually displayed with a progress bar or gauge"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Candidates.tsx",
+          "operation": "create",
+          "description": "Create Candidates page with searchable table of candidates displaying name, email, phone, pipeline stage badge, applied jobs, and AI match score with visual progress indicator. Fetch candidates via listCandidates backend capability. Include search by name/email and filters by status and job. Wire route in App.tsx router."
+        },
+        {
+          "path": "frontend/src/components/CandidateDetail.tsx",
+          "operation": "create",
+          "description": "Create candidate detail panel component showing full profile (name, email, phone, resume text, skills as tags, experience years), match score breakdown with visual gauge/progress bar, timeline of pipeline stage transitions with timestamps and notes, and list of linked interviews. Fetch candidate detail via getCandidate and interviews via getInterviewsByCandidate backend capabilities."
+        },
+        {
+          "path": "frontend/src/components/CandidateForm.tsx",
+          "operation": "create",
+          "description": "Create candidate form component with fields: name, email, phone, resume (textarea with paste area), skills (tag input), experienceYears (number). Include a 'Parse Resume' button that calls parseResume backend capability on the resume text and auto-fills extracted skills, experienceYears, education, and previousRoles into form fields. Submit via createCandidate or updateCandidate backend capabilities."
+        },
+        {
+          "path": "frontend/src/hooks/useCandidates.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for candidate operations: useListCandidates (query listCandidates), useGetCandidate (query getCandidate by id), useCreateCandidate (mutation createCandidate), useUpdateCandidate (mutation updateCandidate), useDeleteCandidate (mutation deleteCandidate, admin-only), useParseResume (mutation parseResume), and useCalculateMatchScore (mutation calculateMatchScore). Handle authorization errors with user-friendly messages."
+        }
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "summary": "Build Kanban-style Pipeline board with drag-and-drop stage transitions and job filtering",
+      "acceptanceCriteria": [
+        "Kanban columns render for all pipeline stages",
+        "Candidate cards show name, job title, and AI match score",
+        "Dragging a card to a new column updates stage via backend call",
+        "Board can be filtered to show only candidates for a selected job"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Pipeline.tsx",
+          "operation": "create",
+          "description": "Create Pipeline page with Kanban board displaying columns for each ATS stage: New, Screening, Shortlisted, Interview Scheduled, Offer Extended, Hired, Rejected. Show candidate cards with name, job title, and AI match score. Implement drag-and-drop using a library (e.g., react-beautiful-dnd or dnd-kit) to move candidates between columns, triggering moveCandidateStage backend capability with optional note dialog. Include job filter dropdown to show candidates for a selected job. Fetch candidates via listCandidates or getCandidatesByJob backend capabilities. Wire route in App.tsx router."
+        },
+        {
+          "path": "frontend/src/components/CandidateCard.tsx",
+          "operation": "create",
+          "description": "Create draggable candidate card component for the Kanban board showing candidate name, applied job title, and AI match score with visual indicator. Make card clickable to open CandidateDetail panel."
+        },
+        {
+          "path": "frontend/src/hooks/usePipeline.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for pipeline operations: useGetCandidatesByStage (query getCandidatesByStage for a job and stage), useMoveCandidateStage (mutation moveCandidateStage with candidateId, newStatus, and optional note). Invalidate candidate queries on successful stage move."
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "Build Interviews page with list/calendar toggle, schedule form, and status updates",
+      "acceptanceCriteria": [
+        "Interviews are displayed in both list and simple calendar view",
+        "Schedule interview form links to candidate and job",
+        "Status can be updated to completed or cancelled",
+        "Upcoming interviews are highlighted"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Interviews.tsx",
+          "operation": "create",
+          "description": "Create Interviews page with toggle between list view and simple calendar view. List view displays scheduled interviews with candidate name, job title, interview type, date/time, interviewer, and status badge. Highlight upcoming interviews. Provide actions to schedule new interview, edit existing interview, and update status to completed or cancelled. Fetch all interviews by iterating candidates and calling getInterviewsByCandidate, or maintain a flat list via listCandidates and aggregate interviews. Wire route in App.tsx router."
+        },
+        {
+          "path": "frontend/src/components/InterviewForm.tsx",
+          "operation": "create",
+          "description": "Create interview form component with fields: candidateId (dropdown of candidates), jobId (dropdown of jobs), dateTime (datetime picker), interviewer (text), interviewType (dropdown: phone/video/onSite), status (dropdown: scheduled/completed/cancelled for edit mode), and notes (textarea). Submit via createInterview or updateInterview backend capabilities."
+        },
+        {
+          "path": "frontend/src/hooks/useInterviews.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for interview operations: useGetInterview (query getInterview by id), useGetInterviewsByCandidate (query getInterviewsByCandidate), useCreateInterview (mutation createInterview), useUpdateInterview (mutation updateInterview), and useDeleteInterview (mutation deleteInterview, admin-only). Handle authorization errors gracefully."
+        }
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "summary": "Build AI Chatbot widget with FAQ responses, quick-reply suggestions, and job data",
+      "acceptanceCriteria": [
+        "Floating chat button is accessible on all pages",
+        "Chatbot responds to at least 10 common recruitment FAQs",
+        "Quick-reply suggestions are shown for common intents",
+        "Chatbot can list open job titles fetched from the backend"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ChatbotWidget.tsx",
+          "operation": "create",
+          "description": "Create floating chatbot widget component visible site-wide as a button in the bottom-right corner. Implement a simple intent-matching chatbot that responds to at least 10 common recruitment FAQs (e.g., 'How do I apply?', 'What jobs are open?', 'How long does hiring take?', 'What is the interview process?', 'Can I edit my application?', 'How do I check application status?', 'What documents do I need?', 'Is remote work available?', 'What benefits do you offer?', 'How do I contact HR?'). Show quick-reply suggestion buttons for common intents. For 'What jobs are open?', fetch and display open job titles via listJobs backend capability filtered by status open. Keep responses concise and intent-focused."
+        },
+        {
+          "path": "frontend/src/components/Layout.tsx",
           "operation": "modify",
-          "description": "Enhance the existing Dashboard page to display comprehensive recruiter analytics: add four prominent summary metric cards at the top showing total open jobs (count jobs with status='open'), total active candidates (count candidates with status not 'rejected' or 'hired'), interviews scheduled this week (filter interviews by dateTime within current week), and average time-to-hire in days (from analyticsData.averageTimeToHireDays); ensure the existing pipeline stage bar chart is updated to use live data from analyticsData.candidatesPerStage; add a ranked list section displaying the top 5 candidates by AI match score using analyticsData.topScoringCandidates, resolving candidate names and job titles, and displaying their match scores using the AIScoreBadge component; fetch analytics data using useGetAnalytics, jobs using useListJobs, candidates using useListCandidates, and interviews using useListInterviews; implement proper loading skeletons and error states for each data section; style consistently with the dark-mode theme and teal/amber accents."
+          "description": "Include the ChatbotWidget component in the Layout so it appears on all pages as a floating element."
+        }
+      ]
+    },
+    {
+      "id": "REQ-18",
+      "summary": "Build Analytics page with line chart, donut chart, bar chart, and time-to-hire table",
+      "acceptanceCriteria": [
+        "All four charts render with real backend data",
+        "Charts are labelled and include legends",
+        "Data auto-refreshes on page visit via React Query"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Analytics.tsx",
+          "operation": "create",
+          "description": "Create Analytics page with four visual charts: line chart for applications over time (last 30 days, derive from candidate createdAt timestamps), donut chart for pipeline stage distribution (use candidatesPerStage from analytics), bar chart for top jobs by application volume (count appliedJobIds per job), and a table of average time-to-hire per job (compute from candidate createdAt to hired status timestamp). Use a charting library (e.g., recharts or chart.js). Fetch data via getAnalytics and listCandidates backend capabilities. Use React Query to auto-refresh data on page visit. Wire route in App.tsx router."
+        }
+      ]
+    },
+    {
+      "id": "REQ-19",
+      "summary": "Build Templates management page with category filter, rich text editor, and live preview",
+      "acceptanceCriteria": [
+        "Templates are listed and filterable by category",
+        "Create/edit form supports placeholder token insertion",
+        "Live preview renders template with sample candidate and job data"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Templates.tsx",
+          "operation": "create",
+          "description": "Create Templates page listing all communication templates with name, subject, category, and actions. Include filter dropdown by category. Fetch templates via listTemplates backend capability. Provide actions to create, edit, and delete templates (admin-only for create/edit/delete). Wire route in App.tsx router."
+        },
+        {
+          "path": "frontend/src/components/TemplateForm.tsx",
+          "operation": "create",
+          "description": "Create template form component with fields: name, subject, body (textarea or simple rich text editor), category (dropdown or text). Include placeholder token insertion buttons for {{candidateName}}, {{jobTitle}}, {{interviewDate}}, {{companyName}}, etc. Show a live preview panel that renders the template with sample data substituted for placeholders. Submit via createTemplate or updateTemplate backend capabilities (admin-only)."
+        },
+        {
+          "path": "frontend/src/hooks/useTemplates.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for template operations: useListTemplates (query listTemplates), useGetTemplate (query getTemplate by id), useCreateTemplate (mutation createTemplate, admin-only), useUpdateTemplate (mutation updateTemplate, admin-only), and useDeleteTemplate (mutation deleteTemplate, admin-only). Handle authorization errors gracefully."
+        }
+      ]
+    },
+    {
+      "id": "REQ-20",
+      "summary": "Build Offers page with list, generation form, formatted preview, and status updates",
+      "acceptanceCriteria": [
+        "Offers list shows all fields and status badges",
+        "Offer generation form populates all required fields",
+        "Formatted offer letter preview renders before saving",
+        "Status update (accept/decline) persists via backend call"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Offers.tsx",
+          "operation": "create",
+          "description": "Create Offers page listing all generated offer letters with candidate name, job title, salary, start date, and status badge (pending/accepted/declined). Fetch offers by iterating candidates and calling getOffersByCandidate, or aggregate from listCandidates. Provide actions to generate new offer, view formatted preview, and update status. Wire route in App.tsx router."
+        },
+        {
+          "path": "frontend/src/components/OfferForm.tsx",
+          "operation": "create",
+          "description": "Create offer generation form component with fields: candidateId (dropdown), jobId (dropdown), salary (number), startDate (date picker), clauses (textarea for custom clauses). Submit via createOfferLetter backend capability. After generation, display formatted offer letter preview using the returned letterText. Provide actions to update offer status to accepted or declined via updateOfferStatus backend capability."
+        },
+        {
+          "path": "frontend/src/hooks/useOffers.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for offer operations: useGetOfferLetter (query getOfferLetter by id), useGetOffersByCandidate (query getOffersByCandidate), useCreateOfferLetter (mutation createOfferLetter), useUpdateOfferStatus (mutation updateOfferStatus), and useDeleteOfferLetter (mutation deleteOfferLetter, admin-only). Handle authorization errors gracefully."
+        }
+      ]
+    },
+    {
+      "id": "REQ-21",
+      "summary": "Apply dark-mode-first design theme with teal and amber accents, sharp borders, and gradient highlights on AI elements",
+      "acceptanceCriteria": [
+        "Dark background is applied globally",
+        "Teal and amber accents are used consistently for CTAs and highlights",
+        "AI score elements use gradient treatment to differentiate them visually",
+        "Typography and spacing are consistent across all pages"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Apply a bold, modern dark-mode-first design theme globally: use deep charcoal/slate background (#1a1a1a or similar), vibrant teal (#14b8a6 or similar) and amber (#f59e0b or similar) as accent colors for CTAs and highlights, sharp card borders with subtle shadows, clean sans-serif typography (e.g., Inter or system fonts), and consistent spacing. Define CSS custom properties for theme colors and reuse them throughout."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind config to include custom dark theme colors: primary teal, secondary amber, dark backgrounds (charcoal/slate shades), and border colors. Define gradient utilities for AI score highlights (e.g., teal-to-amber gradient). Ensure all components use these theme tokens consistently."
+        },
+        {
+          "path": "frontend/src/components/AIScoreBadge.tsx",
+          "operation": "create",
+          "description": "Create reusable AI score badge component displaying a candidate's match score with a gradient background (teal-to-amber) and a progress bar or circular gauge. Use this component consistently across Candidates, Pipeline, and Dashboard to visually differentiate AI-scored elements."
+        }
+      ]
+    },
+    {
+      "id": "REQ-22",
+      "summary": "Wire generated hero logo asset in sidebar and favicon, and dashboard banner in Dashboard page",
+      "acceptanceCriteria": [
+        "Logo appears in the sidebar at correct dimensions",
+        "Dashboard banner is rendered at the top of the Dashboard page",
+        "Assets are loaded from frontend/public/assets/generated"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "modify",
+          "description": "Update Layout component to display the generated logo asset frontend/public/assets/generated/hireiq-logo.dim_200x60.png in the sidebar header at 200x60 dimensions. Ensure the logo is visible and properly styled within the dark theme."
+        },
+        {
+          "path": "frontend/src/pages/Dashboard.tsx",
+          "operation": "modify",
+          "description": "Update Dashboard page to render the generated banner asset frontend/public/assets/generated/dashboard-banner.dim_1200x300.png as a decorative header at the top of the page at 1200x300 dimensions. Ensure the banner integrates seamlessly with the page layout and dark theme."
+        },
+        {
+          "path": "frontend/public/index.html",
+          "operation": "modify",
+          "description": "Update the favicon link to reference the generated icon asset frontend/public/assets/generated/hireiq-icon.dim_64x64.png at 64x64 dimensions for the browser tab icon."
         }
       ]
     }

@@ -1,4 +1,244 @@
 {
   "kind": "feature_evidence_report",
-  "features": []
+  "features": [
+    {
+      "featureId": "feature-build-a-react-frontend-with-a-sidebar-navigation-layout-featuring-sections-dashboard-jobs-candidates-pipeline-interviews-analytics-templates-offers-and-settings-include-a-top-header-with-app-logo-logged-in-user-role-indicator-and-notification-bell-icon",
+      "featureTitle": "Build a React frontend with a sidebar navigation layout featuring sections: Dashboard, Jobs, Candidates, Pipeline, Interviews, Analytics, Templates, Offers, and Settings. Include a top header with app logo, logged-in user role indicator, and notification bell icon.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/Layout.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-dashboard-page-displaying-live-recruiter-analytics-cards-for-total-open-jobs-total-active-candidates-total-interviews-this-week-and-average-time-to-hire-a-bar-chart-of-candidates-per-pipeline-stage-and-a-ranked-list-of-top-5-ai-matched-candidates-across-all-open-jobs",
+      "featureTitle": "Build a Dashboard page displaying live recruiter analytics: cards for total open jobs, total active candidates, total interviews this week, and average time-to-hire; a bar chart of candidates per pipeline stage; and a ranked list of top 5 AI-matched candidates across all open jobs.",
+      "files": [
+        "frontend/src/pages/Dashboard.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-12"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-jobs-management-page-display-a-searchable-filterable-table-of-all-job-requisitions-with-status-badges-provide-a-slide-over-form-to-create-or-edit-a-job-with-all-required-fields-allow-status-changes-inline-and-include-a-view-candidates-action-per-job-that-navigates-to-the-filtered-candidate-pipeline",
+      "featureTitle": "Build a Jobs management page: display a searchable, filterable table of all job requisitions with status badges; provide a slide-over form to create or edit a job with all required fields; allow status changes inline; and include a 'View Candidates' action per job that navigates to the filtered candidate pipeline.",
+      "files": [
+        "frontend/src/components/JobForm.tsx",
+        "frontend/src/pages/Jobs.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-13"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-candidates-management-page-display-a-searchable-table-of-candidates-with-ai-match-score-pipeline-stage-badge-and-applied-job-include-a-candidate-detail-panel-showing-parsed-profile-skill-tags-match-score-breakdown-timeline-of-stage-transitions-and-linked-interviews-provide-a-resume-text-upload-paste-area-that-triggers-ai-parsing-and-auto-fills-the-candidate-form",
+      "featureTitle": "Build a Candidates management page: display a searchable table of candidates with AI match score, pipeline stage badge, and applied job; include a candidate detail panel showing parsed profile, skill tags, match score breakdown, timeline of stage transitions, and linked interviews; provide a resume text upload/paste area that triggers AI parsing and auto-fills the candidate form.",
+      "files": [
+        "frontend/src/components/CandidateDetail.tsx",
+        "frontend/src/components/CandidateForm.tsx",
+        "frontend/src/pages/Candidates.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-kanban-style-pipeline-board-page-display-columns-for-each-ats-stage-new-screening-shortlisted-interview-scheduled-offer-extended-hired-rejected-show-candidate-cards-with-name-job-and-ai-score-allow-drag-and-drop-between-columns-to-move-candidates-through-stages-with-an-optional-note-dialog-filter-board-by-job",
+      "featureTitle": "Build a Kanban-style Pipeline board page: display columns for each ATS stage (New, Screening, Shortlisted, Interview Scheduled, Offer Extended, Hired, Rejected); show candidate cards with name, job, and AI score; allow drag-and-drop between columns to move candidates through stages with an optional note dialog; filter board by job.",
+      "files": [
+        "frontend/src/pages/Pipeline.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-an-interviews-page-display-a-list-calendar-toggle-of-scheduled-interviews-showing-candidate-name-job-interview-type-date-time-interviewer-and-status-provide-a-form-to-schedule-a-new-interview-or-edit-existing-ones-allow-marking-interviews-as-completed-or-cancelled",
+      "featureTitle": "Build an Interviews page: display a list/calendar toggle of scheduled interviews showing candidate name, job, interview type, date/time, interviewer, and status; provide a form to schedule a new interview or edit existing ones; allow marking interviews as completed or cancelled.",
+      "files": [
+        "frontend/src/components/InterviewForm.tsx",
+        "frontend/src/pages/Interviews.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-an-ai-chatbot-widget-visible-site-wide-as-a-floating-button-the-chatbot-answers-candidate-faqs-about-job-openings-application-status-and-the-hiring-process-using-pre-defined-intents-and-job-data-fetched-from-the-backend-it-includes-a-suggested-questions-quick-reply-panel",
+      "featureTitle": "Build an AI Chatbot widget visible site-wide as a floating button: the chatbot answers candidate FAQs about job openings, application status, and the hiring process using pre-defined intents and job data fetched from the backend; it includes a suggested-questions quick-reply panel.",
+      "files": [
+        "frontend/src/components/ChatbotWidget.tsx",
+        "frontend/src/components/Layout.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-17"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-an-analytics-page-with-visual-charts-line-chart-for-applications-over-time-last-30-days-donut-chart-for-pipeline-stage-distribution-bar-chart-for-top-jobs-by-application-volume-and-a-table-of-average-time-to-hire-per-job-use-react-query-to-fetch-data-from-backend-analytics-endpoints",
+      "featureTitle": "Build an Analytics page with visual charts: line chart for applications over time (last 30 days), donut chart for pipeline stage distribution, bar chart for top jobs by application volume, and a table of average time-to-hire per job. Use React Query to fetch data from backend analytics endpoints.",
+      "files": [
+        "frontend/src/pages/Analytics.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-18"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-templates-management-page-list-all-email-communication-templates-with-category-filter-provide-a-rich-text-editor-form-to-create-or-edit-templates-with-placeholder-token-insertion-buttons-show-a-live-preview-panel-rendering-the-template-with-sample-data",
+      "featureTitle": "Build a Templates management page: list all email/communication templates with category filter; provide a rich text editor form to create or edit templates with placeholder token insertion buttons; show a live preview panel rendering the template with sample data.",
+      "files": [
+        "frontend/src/components/TemplateForm.tsx",
+        "frontend/src/pages/Templates.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-19"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-an-offers-page-list-all-generated-offer-letters-with-candidate-name-job-salary-start-date-and-status-badge-provide-a-form-to-generate-a-new-offer-letter-with-custom-clauses-display-a-formatted-offer-letter-preview-allow-updating-offer-status-to-accepted-or-declined",
+      "featureTitle": "Build an Offers page: list all generated offer letters with candidate name, job, salary, start date, and status badge; provide a form to generate a new offer letter with custom clauses; display a formatted offer letter preview; allow updating offer status to accepted or declined.",
+      "files": [
+        "frontend/src/components/OfferForm.tsx",
+        "frontend/src/pages/Offers.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-20"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-bold-modern-dark-mode-first-design-theme-across-the-entire-frontend-use-a-deep-charcoal-slate-background-with-vibrant-teal-and-amber-accent-colors-sharp-card-borders-clean-sans-serif-typography-subtle-gradient-highlights-on-ai-scored-elements-and-consistent-icon-usage-throughout-all-pages",
+      "featureTitle": "Apply a bold, modern dark-mode-first design theme across the entire frontend: use a deep charcoal/slate background with vibrant teal and amber accent colors, sharp card borders, clean sans-serif typography, subtle gradient highlights on AI-scored elements, and consistent icon usage throughout all pages.",
+      "files": [
+        "frontend/src/components/AIScoreBadge.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-21"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-use-the-generated-hero-logo-asset-hireiq-logo-dim-200x60-png-in-the-sidebar-header-and-browser-tab-favicon-use-the-generated-dashboard-banner-dashboard-banner-dim-1200x300-png-as-a-decorative-header-on-the-dashboard-page",
+      "featureTitle": "Use the generated hero logo asset (hireiq-logo.dim_200x60.png) in the sidebar header and browser tab favicon. Use the generated dashboard banner (dashboard-banner.dim_1200x300.png) as a decorative header on the Dashboard page.",
+      "files": [
+        "frontend/src/components/Layout.tsx",
+        "frontend/src/pages/Dashboard.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-22"
+      ],
+      "confidence": "high"
+    }
+  ]
 }
